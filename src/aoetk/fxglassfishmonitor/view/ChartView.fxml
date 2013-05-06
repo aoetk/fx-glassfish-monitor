@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane id="StackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="360.0" onMousePressed="#handleMousePressed" onMouseDragged="#handleMouseDragged" xmlns:fx="http://javafx.com/fxml" fx:controller="aoetk.fxglassfishmonitor.view.ChartViewController">
+  <children>
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1e90ff00" height="320.0" stroke="#00e0ff" strokeType="INSIDE" width="350.0">
+      <effect>
+        <DropShadow color="#00ffe0" spread="0.5" />
+      </effect>
+    </Rectangle>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="container">
+      <children>
+        <LineChart id="LineChartNxN" fx:id="chart" alternativeRowFillVisible="false" legendVisible="false" title="metric" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+          <xAxis>
+            <NumberAxis fx:id="xAxis" label="Time" side="BOTTOM" />
+          </xAxis>
+          <yAxis>
+            <NumberAxis fx:id="yAxis" side="LEFT" />
+          </yAxis>
+          <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+          </padding>
+        </LineChart>
+        <Button mnemonicParsing="false" onAction="#handleBtnCloseAction" styleClass="close-button" text="×" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      </children>
+      <StackPane.margin>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      </StackPane.margin>
+    </AnchorPane>
+  </children>
+  <stylesheets>
+    <URL value="@../asset/style.css" />
+  </stylesheets>
+</StackPane>

@@ -1,0 +1,69 @@
+.container {
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+}
+
+.close-button {
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+.table-view, .table-view:focused  {
+    -fx-background-color: null;
+}
+.table-row-cell {
+    -fx-background-color: null;
+}
+.table-view {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 10;
+}
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255,255,255,0.3) transparent;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+    -fx-padding: 0 10 0 0;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-border-color: transparent;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #e1fdff;
+    -fx-font-weight: bold;
+}
+.table-view .table-cell {
+    -fx-border-color: transparent;
+    -fx-text-fill: white;
+}
+.table-view  .table-row-cell:filled:selected:focused, .table-row-cell:filled:selected {
+    -fx-background-color: rgba(0,0,0,0.1);
+}
+
+.chart-title {
+    -fx-text-fill: white;
+}
+
+.axis {
+    -fx-tick-label-fill: white;
+}
+
+.axis-label {
+    -fx-text-fill: white;
+}
+
+.chart-series-line {
+    -fx-stroke-width: 2px;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
