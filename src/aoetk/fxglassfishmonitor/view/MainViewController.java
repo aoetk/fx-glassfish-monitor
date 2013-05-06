@@ -3,6 +3,7 @@ package aoetk.fxglassfishmonitor.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import aoetk.fxglassfishmonitor.model.GlassFishMonitor;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +27,8 @@ public class MainViewController extends DraggableViewBase implements Initializab
 
     @FXML
     Pane drawRegion;
+
+    private GlassFishMonitor monitor;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

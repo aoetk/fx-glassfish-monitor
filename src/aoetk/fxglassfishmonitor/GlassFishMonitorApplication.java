@@ -13,7 +13,7 @@ import javafx.stage.StageStyle;
  * GlassFish Monitor Application.
  * @author aoetk
  */
-public class GlassFishMonitor extends Application {
+public class GlassFishMonitorApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
