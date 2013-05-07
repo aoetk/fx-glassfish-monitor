@@ -20,7 +20,7 @@ import javafx.scene.text.Font;
  * Pod icon for statistic.
  * @author aoetk
  */
-public class StatisticPod extends Region {
+public class StatisticPod extends ResourcePod {
 
     private Rectangle pod;
 
@@ -69,15 +69,4 @@ public class StatisticPod extends Region {
         icon.setLayoutX(67.0);
         icon.setLayoutY(42.0);
     }
-
-    @Override
-    protected double computePrefWidth(double d) {
-        return 150.0;
-    }
-
-    @Override
-    protected double computePrefHeight(double d) {
-        return 100.0;
-    }
-
 }

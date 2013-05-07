@@ -40,7 +40,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
         monitor = new GlassFishMonitor();
         try {
             monitor.initialize();
-            drawView(monitor.getServerResource());
+            drawRoot(monitor.getServerResource());
         } catch (ConnectFailedException ex) {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -51,8 +51,8 @@ public class MainViewController extends DraggableViewBase implements Initializab
         Platform.exit();
     }
 
-    private void drawView(ResourceHolder rootResource) {
-        // TODO 描画処理
+    private void drawRoot(ResourceHolder rootResource) {
+        
     }
 
 }

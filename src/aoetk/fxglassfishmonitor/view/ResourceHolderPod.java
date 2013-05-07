@@ -24,7 +24,7 @@ import javafx.scene.text.Font;
  * Pod icon for resource holder.
  * @author aoetk
  */
-public class ResourceHolderPod extends Region {
+public class ResourceHolderPod extends ResourcePod {
 
     private Rectangle pod;
 
@@ -110,16 +110,6 @@ public class ResourceHolderPod extends Region {
         label.setLayoutY(80.0);
         icon.setLayoutX(67.0);
         icon.setLayoutY(42.0);
-    }
-
-    @Override
-    protected double computePrefWidth(double d) {
-        return 150.0;
-    }
-
-    @Override
-    protected double computePrefHeight(double d) {
-        return 100.0;
     }
 
 }
