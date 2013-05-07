@@ -1,5 +1,6 @@
 package aoetk.fxglassfishmonitor.view;
 
+import aoetk.fxglassfishmonitor.model.ResourceHolder;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
@@ -46,9 +47,9 @@ public class ResourceHolderPod extends ResourcePod {
         return open;
     }
 
-    public ResourceHolderPod(String name, boolean open) {
-        super();
-        createChildren(name, open);
+    public ResourceHolderPod(ResourceHolder resourceHolderModel, boolean open) {
+        super(resourceHolderModel);
+        createChildren(resourceHolderModel.getName(), open);
     }
 
     private void createChildren(String name, boolean open) {

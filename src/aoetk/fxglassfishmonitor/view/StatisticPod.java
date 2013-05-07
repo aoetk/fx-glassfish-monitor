@@ -1,5 +1,6 @@
 package aoetk.fxglassfishmonitor.view;
 
+import aoetk.fxglassfishmonitor.model.Statistic;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -30,9 +31,9 @@ public class StatisticPod extends ResourcePod {
 
     private Label label;
 
-    public StatisticPod(String name) {
-        super();
-        createChildren(name);
+    public StatisticPod(Statistic statisticModel) {
+        super(statisticModel);
+        createChildren(statisticModel.getName());
     }
 
     public Rectangle getPod() {

@@ -1,5 +1,6 @@
 package aoetk.fxglassfishmonitor.view;
 
+import aoetk.fxglassfishmonitor.model.Resource;
 import javafx.scene.layout.Region;
 
 /**
@@ -7,6 +8,16 @@ import javafx.scene.layout.Region;
  * @author aoetk
  */
 public class ResourcePod extends Region {
+
+    protected Resource resourceModel;
+
+    public ResourcePod(Resource resourceModel) {
+        this.resourceModel = resourceModel;
+    }
+
+    public Resource getResourceModel() {
+        return resourceModel;
+    }
 
     @Override
     protected double computePrefWidth(double d) {
