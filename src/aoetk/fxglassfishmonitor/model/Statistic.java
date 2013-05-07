@@ -12,8 +12,9 @@ public class Statistic extends Resource {
 
     private StatisticType type;
 
-    public Statistic(String name, int depth, int siblingIndex, StatisticType type, List<Metric> metrics) {
-        super(name, depth, siblingIndex);
+    public Statistic(String name, int depth, int siblingIndex, StatisticType type, List<Metric> metrics,
+            ResourceHolder parent) {
+        super(name, depth, siblingIndex, parent);
         this.type = type;
         this.metrics = metrics;
     }

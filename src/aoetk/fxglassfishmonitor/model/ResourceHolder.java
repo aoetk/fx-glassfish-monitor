@@ -18,8 +18,8 @@ public class ResourceHolder extends Resource {
 
     private List<ResourceHolder> childResources = new ArrayList<>();
 
-    public ResourceHolder(String name, int depth, int siblingIndex) {
-        super(name, depth, siblingIndex);
+    public ResourceHolder(String name, int depth, int siblingIndex, ResourceHolder parent) {
+        super(name, depth, siblingIndex, parent);
     }
 
     public BooleanProperty childTracedProperty() {

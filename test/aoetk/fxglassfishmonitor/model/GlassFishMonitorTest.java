@@ -5,8 +5,8 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author aoetakashi
+ * Test for {@link GlassFishMonitor}.
+ * @author aoetk
  */
 public class GlassFishMonitorTest {
 
@@ -32,4 +32,21 @@ public class GlassFishMonitorTest {
         assertThat(actual.childTracedProperty().get(), is(true));
         assertThat(actual.getChildResources().size(), is(9));
     }
+
+    @Test
+    public void testTraceChildResouce_updateResoucesSiblingIndex() throws Exception {
+        GlassFishMonitor sut = new GlassFishMonitor();
+        sut.initialize();
+        ResourceHolder root = sut.getServerResource();
+        sut.traceChildResource(root);
+        ResourceHolder network = root.getChildResources().get(4);
+        sut.traceChildResource(network);
+        assertThat(network.getChildResources().size(), is(7));
+        assertThat(network.siblingIndexProperty().get(), is(4));
+        assertThat(root.getChildResources().get(5).siblingIndexProperty().get(), is(11));
+        assertThat(root.getChildResources().get(6).siblingIndexProperty().get(), is(12));
+        assertThat(root.getChildResources().get(7).siblingIndexProperty().get(), is(13));
+        assertThat(root.getChildResources().get(8).siblingIndexProperty().get(), is(14));
+    }
+
 }

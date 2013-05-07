@@ -15,12 +15,13 @@ public class Resource {
 
     protected String name;
 
-    protected Resource parent;
+    protected ResourceHolder parent;
 
-    public Resource(String name, int depth, int siblingIndex) {
+    public Resource(String name, int depth, int siblingIndex, ResourceHolder parent) {
         this.name = name;
         this.depth.set(depth);
         this.siblingIndex.set(siblingIndex);
+        this.parent = parent;
     }
 
     public String getName() {
@@ -35,11 +36,11 @@ public class Resource {
         return siblingIndex;
     }
 
-    public Resource getParent() {
+    public ResourceHolder getParent() {
         return parent;
     }
 
-    public void setParent(Resource parent) {
+    public void setParent(ResourceHolder parent) {
         this.parent = parent;
     }
 

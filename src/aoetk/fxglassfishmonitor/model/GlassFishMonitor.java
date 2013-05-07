@@ -31,12 +31,13 @@ public class GlassFishMonitor {
     }
 
     public void initialize() throws ConnectFailedException {
-        serverResource = new ResourceHolder(ROOT_RESOURCE_NAME, 0, 0);
+        serverResource = new ResourceHolder(ROOT_RESOURCE_NAME, 0, 0, null);
     }
 
     public void traceChildResource(ResourceHolder resourceHolder) throws ConnectFailedException {
         GlassFishData gotData = serviceClient.getResource(
-                GlassFishServiceClient.BASE_URL + resourceHolder.getName() + GlassFishServiceClient.EXTENSION);
+                GlassFishServiceClient.BASE_URL + getFullName(resourceHolder, resourceHolder.getName())
+                + GlassFishServiceClient.EXTENSION);
         addChildResource(resourceHolder, gotData);
     }
 
@@ -57,7 +58,7 @@ public class GlassFishMonitor {
                 }
                 resourceHolder.getChildStatistics().add(
                         new Statistic(key, resourceHolder.depthProperty().get() + 1,
-                        resourceHolder.siblingIndexProperty().get() + idx, statisticType, metrics));
+                        resourceHolder.siblingIndexProperty().get() + idx, statisticType, metrics, resourceHolder));
                 idx++;
             }
         }
@@ -66,10 +67,11 @@ public class GlassFishMonitor {
             for (String key : childResources.keySet()) {
                 resourceHolder.getChildResources().add(
                         new ResourceHolder(key, resourceHolder.depthProperty().get() + 1,
-                        resourceHolder.siblingIndexProperty().get() + idx));
+                        resourceHolder.siblingIndexProperty().get() + idx, resourceHolder));
                 idx++;
             }
         }
+        updateResoucesSiblingIndex(resourceHolder);
         resourceHolder.childTracedProperty().set(true);
     }
 
@@ -110,6 +112,39 @@ public class GlassFishMonitor {
             return MetricType.LONG;
         default:
             return MetricType.STRING;
+        }
+    }
+
+    private void updateResoucesSiblingIndex(ResourceHolder baseResouceHolder) {
+        final ResourceHolder parent = baseResouceHolder.getParent();
+        final int baseIndex = baseResouceHolder.siblingIndexProperty().get();
+        final int diff = baseResouceHolder.getChildStatistics().size() + baseResouceHolder.getChildResources().size() - 1;
+        if (parent != null) {
+            List<ResourceHolder> childResouces = parent.getChildResources();
+            for (ResourceHolder resourceHolder : childResouces) {
+                if (resourceHolder.siblingIndexProperty().get() > baseIndex) {
+                    addSiblingIndex(resourceHolder, diff);
+                }
+            }
+        }
+    }
+
+    private void addSiblingIndex(ResourceHolder resourceHolder, int diff) {
+        resourceHolder.siblingIndexProperty().set(resourceHolder.siblingIndexProperty().get() + diff);
+        for (Statistic statistic : resourceHolder.getChildStatistics()) {
+            statistic.siblingIndexProperty().set(statistic.siblingIndexProperty().get() + diff);
+        }
+        for (ResourceHolder childHolder : resourceHolder.getChildResources()) {
+            addSiblingIndex(childHolder, diff);
+        }
+    }
+
+    private String getFullName(ResourceHolder resourceHolder, String startName) {
+        if (resourceHolder.getParent() == null) {
+            return startName;
+        } else {
+            ResourceHolder parent = resourceHolder.getParent();
+            return getFullName(parent, parent.getName() + "/" + startName);
         }
     }
 
