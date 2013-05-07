@@ -29,7 +29,7 @@ public class ResourceHolderPod extends ResourcePod {
 
     private Rectangle pod;
 
-    private Circle childOpener;
+    private Circle expander;
 
     private Label label;
 
@@ -61,7 +61,7 @@ public class ResourceHolderPod extends ResourcePod {
                 .stroke(Color.WHITE).strokeWidth(3.0)
                 .fill(Color.TRANSPARENT).effect(shadow)
                 .build();
-        childOpener = CircleBuilder.create()
+        expander = CircleBuilder.create()
                 .radius(12.5)
                 .stroke(Color.WHITE).strokeWidth(3.0)
                 .fill(Color.TRANSPARENT).effect(shadow)
@@ -71,14 +71,14 @@ public class ResourceHolderPod extends ResourcePod {
                 .text("+").textFill(Color.WHITE)
                 .prefWidth(25.0).prefHeight(25.0)
                 .alignment(Pos.CENTER)
-                .font(new Font(16.0))
+                .font(new Font(16.0)).effect(shadow)
                 .build();
         plus.visibleProperty().bind(this.open.not());
         minus = LabelBuilder.create()
                 .text("-").textFill(Color.WHITE)
                 .prefWidth(25.0).prefHeight(25.0)
                 .alignment(Pos.CENTER)
-                .font(new Font(16.0))
+                .font(new Font(16.0)).effect(shadow)
                 .build();
         minus.visibleProperty().bind(this.open);
         label = LabelBuilder.create()
@@ -88,12 +88,12 @@ public class ResourceHolderPod extends ResourcePod {
                 .prefWidth(150.0)
                 .build();
         icon = ImageViewBuilder.create()
-                .image(new Image("aoetk/fxglassfishmonitor/asset/configuration.gif")).build();
-        this.getChildren().addAll(pod, childOpener, plus, minus, label, icon);
+                .image(new Image("aoetk/fxglassfishmonitor/asset/configurations.gif")).build();
+        this.getChildren().addAll(pod, plus, minus, expander, label, icon);
     }
 
-    public Circle getChildOpener() {
-        return childOpener;
+    public Circle getExpander() {
+        return expander;
     }
 
     @Override
@@ -101,8 +101,8 @@ public class ResourceHolderPod extends ResourcePod {
         super.layoutChildren();
         pod.setLayoutX(50.0);
         pod.setLayoutY(25.0);
-        childOpener.setCenterX(112.5);
-        childOpener.setCenterY(50.0);
+        expander.setCenterX(112.5);
+        expander.setCenterY(50.0);
         plus.setLayoutX(100.0);
         plus.setLayoutY(37.5);
         minus.setLayoutX(100.0);

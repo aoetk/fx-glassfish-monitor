@@ -20,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /**
@@ -45,6 +46,9 @@ public class MainViewController extends DraggableViewBase implements Initializab
     BorderPane containerPane;
 
     @FXML
+    HBox boxTitle;
+
+    @FXML
     Button btnExit;
 
     @FXML
@@ -56,7 +60,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        containerPane.setCursor(Cursor.OPEN_HAND);
+        boxTitle.setCursor(Cursor.OPEN_HAND);
         monitor = new GlassFishMonitor();
         try {
             monitor.initialize();
@@ -74,7 +78,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
     private void drawRoot(ResourceHolder rootResource) {
         ResourceHolderPod rootPod = new ResourceHolderPod(rootResource, false);
         resourcePods.put(rootResource.getName(), rootPod);
-        rootPod.getChildOpener().setOnMouseClicked(new ExpandHandler());
+        rootPod.getExpander().setOnMouseClicked(new ExpandHandler());
         rootPod.setLayoutX(0);
         rootPod.setLayoutY(0);
         drawRegion.getChildren().add(rootPod);

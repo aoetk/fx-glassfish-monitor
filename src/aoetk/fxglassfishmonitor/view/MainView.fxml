@@ -31,7 +31,7 @@
         </ScrollPane>
       </center>
       <top>
-        <HBox prefHeight="40.0" prefWidth="200.0">
+        <HBox fx:id="boxTitle" prefHeight="40.0" prefWidth="200.0">
           <children>
             <Text fill="WHITE" fontSmoothingType="LCD" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="FX GlassFish Monitor" HBox.hgrow="NEVER">
               <font>
