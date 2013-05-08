@@ -14,25 +14,33 @@ public class ResourceChangeEvent extends Event {
 
     public static final EventType<ResourceChangeEvent> REMOVE = new EventType<>("remove");
 
-    private List<String> addedOrRemovedResourceNames;
+    private String baseResourceName;
 
-    private List<String> movedResourceNames;
+    private List<Resource> addedOrRemovedResources;
+
+    private List<Resource> movedResources;
 
     public ResourceChangeEvent(
             EventType<ResourceChangeEvent> eventType,
-            List<String> addedResourceNames,
-            List<String> movedResourceNames) {
+            String baseResouceName,
+            List<Resource> addedOrRemovedResources,
+            List<Resource> movedResources) {
         super(eventType);
-        this.addedOrRemovedResourceNames = addedResourceNames;
-        this.movedResourceNames = movedResourceNames;
+        this.baseResourceName = baseResouceName;
+        this.addedOrRemovedResources = addedOrRemovedResources;
+        this.movedResources = movedResources;
     }
 
-    public List<String> getAddedOrRemovedResourceNames() {
-        return addedOrRemovedResourceNames;
+    public String getBaseResourceName() {
+        return baseResourceName;
     }
 
-    public List<String> getMovedResourceNames() {
-        return movedResourceNames;
+    public List<Resource> getAddedOrRemovedResources() {
+        return addedOrRemovedResources;
+    }
+
+    public List<Resource> getMovedResources() {
+        return movedResources;
     }
 
 }
