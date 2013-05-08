@@ -8,12 +8,15 @@ import java.util.Map;
 import aoetk.fxglassfishmonitor.serviceclient.ConnectFailedException;
 import aoetk.fxglassfishmonitor.serviceclient.GlassFishData;
 import aoetk.fxglassfishmonitor.serviceclient.GlassFishServiceClient;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 
 /**
  * The monitor for GlassFish resources.
  * @author aoetk
  */
-public class GlassFishMonitor {
+public class GlassFishMonitor implements EventTarget {
 
     public static final String ROOT_RESOURCE_NAME = "server";
 
@@ -22,12 +25,19 @@ public class GlassFishMonitor {
 
     private GlassFishServiceClient serviceClient;
 
+    private EventHandler<ResourceChangeEvent> onResourceChanged;
+
     public GlassFishMonitor() {
         serviceClient = new GlassFishServiceClient();
     }
 
     public ResourceHolder getServerResource() {
         return serverResource;
+    }
+
+    public void setOnResourceChanged(
+            EventHandler<ResourceChangeEvent> onResourceChanged) {
+        this.onResourceChanged = onResourceChanged;
     }
 
     public void initialize() throws ConnectFailedException {
@@ -146,6 +156,11 @@ public class GlassFishMonitor {
             ResourceHolder parent = resourceHolder.getParent();
             return getFullName(parent, parent.getName() + "/" + startName);
         }
+    }
+
+    @Override
+    public EventDispatchChain buildEventDispatchChain(EventDispatchChain edc) {
+        return edc;
     }
 
 }
