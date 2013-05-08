@@ -53,20 +53,22 @@ public class ResourcePod extends Region {
 
     private void createLine() {
         Resource parent = resourceModel.getParent();
-        int depth = resourceModel.depthProperty().get();
-        int siblingIndex = resourceModel.siblingIndexProperty().get();
-        int verticaldiff = siblingIndex - parent.siblingIndexProperty().get();
-        if (verticaldiff == 0) {
-            horizontalLine = new Line(depth * 150.0 - 25.0, depth * 150.0 + 50.0,
-                    siblingIndex * 100.0 - 50.0, siblingIndex * 100.0 - 50.0);
-            horizontalLine.setVisible(false);
-        } else {
-            vertialLine = new Line(depth * 150.0, depth * 150.0,
-                    parent.siblingIndexProperty().get() * 100.0 - 50.0, siblingIndex * 100.0 - 50.0);
-            vertialLine.setVisible(false);
-            horizontalLine = new Line(depth * 150.0, depth * 150.0 + 50.0,
-                    siblingIndex * 100.0 - 50.0, siblingIndex * 100.0 - 50.0);
-            horizontalLine.setVisible(false);
+        if (parent != null) {
+            int depth = resourceModel.depthProperty().get();
+            int siblingIndex = resourceModel.siblingIndexProperty().get();
+            int verticaldiff = siblingIndex - parent.siblingIndexProperty().get();
+            if (verticaldiff == 0) {
+                horizontalLine = new Line(depth * 150.0 - 25.0, depth * 150.0 + 50.0,
+                        siblingIndex * 100.0 - 50.0, siblingIndex * 100.0 - 50.0);
+                horizontalLine.setVisible(false);
+            } else {
+                vertialLine = new Line(depth * 150.0, depth * 150.0,
+                        parent.siblingIndexProperty().get() * 100.0 - 50.0, siblingIndex * 100.0 - 50.0);
+                vertialLine.setVisible(false);
+                horizontalLine = new Line(depth * 150.0, depth * 150.0 + 50.0,
+                        siblingIndex * 100.0 - 50.0, siblingIndex * 100.0 - 50.0);
+                horizontalLine.setVisible(false);
+            }
         }
     }
 

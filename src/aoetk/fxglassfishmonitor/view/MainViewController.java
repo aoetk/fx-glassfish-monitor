@@ -130,6 +130,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
                         addedPod = new StatisticPod((Statistic) addedResource);
                     } else {
                         addedPod = new ResourceHolderPod((ResourceHolder) addedResource, false);
+                        ((ResourceHolderPod) addedPod).getExpander().setOnMouseClicked(new ExpandHandler());
                     }
                     resourcePods.put(addedResource.getName(), basePod);
                 }
@@ -146,6 +147,16 @@ public class MainViewController extends DraggableViewBase implements Initializab
                     visualizeLines.add(addedPod.getVertialLine());
                 }
             }
+
+            // 移動するPodに対してKeyValueを作成する
+            for (Resource movedResource : movedResources) {
+                ResourcePod movedPod = resourcePods.get(movedResource.getName());
+                int newDepth = movedResource.depthProperty().get();
+                keyValues.add(new KeyValue(movedPod.layoutYProperty(), 100.0 * newDepth));
+                keyValues.add(new KeyValue(
+                        movedPod.getHorizontalLine().layoutYProperty(), 100.0 * newDepth + 50.0));
+                keyValues.add(new KeyValue(movedPod.getVertialLine().endYProperty(), 100.0 * newDepth + 50.0));
+            }
             timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.3), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent t) {
@@ -157,10 +168,10 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 }
             }, keyValues.toArray(new KeyValue[keyValues.size()])));
 
-            // 移動するPodに対してKeyValueを作成する
         } else {
             // 削除されるPodをシーングラフから取り除く
         }
+        timeline.play();
     }
 
 }
