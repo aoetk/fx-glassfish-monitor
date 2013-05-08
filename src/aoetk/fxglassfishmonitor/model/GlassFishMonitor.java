@@ -20,6 +20,10 @@ public class GlassFishMonitor implements EventTarget {
 
     public static final String ROOT_RESOURCE_NAME = "server";
 
+    private int maxDepth;
+
+    private int maxSiblingIndex;
+
     // root resource
     private ResourceHolder serverResource;
 
@@ -29,6 +33,16 @@ public class GlassFishMonitor implements EventTarget {
 
     public GlassFishMonitor() {
         serviceClient = new GlassFishServiceClient();
+        maxDepth = 0;
+        maxSiblingIndex = 0;
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+
+    public int getMaxSiblingIndex() {
+        return maxSiblingIndex;
     }
 
     public ResourceHolder getServerResource() {
@@ -75,6 +89,10 @@ public class GlassFishMonitor implements EventTarget {
                 addedResources.add(newStatistic);
                 idx++;
             }
+            if (resourceHolder.depthProperty().get() + 1 > maxDepth) {
+                maxDepth++;
+            }
+            maxSiblingIndex = maxSiblingIndex + entites.size() - 1;
         }
         if (!childResources.isEmpty()) {
             // add ChildResource names
@@ -85,6 +103,10 @@ public class GlassFishMonitor implements EventTarget {
                 addedResources.add(newResouceHolder);
                 idx++;
             }
+            if (resourceHolder.depthProperty().get() + 1 > maxDepth) {
+                maxDepth++;
+            }
+            maxSiblingIndex = maxSiblingIndex + childResources.size() - 1;
         }
         updateResoucesSiblingIndex(resourceHolder, movedResouces);
         resourceHolder.childTracedProperty().set(true);

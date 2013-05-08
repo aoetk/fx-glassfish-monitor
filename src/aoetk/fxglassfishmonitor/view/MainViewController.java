@@ -116,7 +116,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
     private void moveResoucePod(String baseResouceName, List<Resource> addedOrRemovedResources,
             List<Resource> movedResources, boolean added) {
         Timeline timeline = new Timeline();
-        ResourcePod basePod = resourcePods.get(baseResouceName);
+        final ResourceHolderPod basePod = (ResourceHolderPod) resourcePods.get(baseResouceName);
         if (added) {
             // 追加されたPodを新たに作り、シーングラフに追加後KeyValueを作成する
             final List<KeyValue> keyValues = new ArrayList<>();
@@ -132,7 +132,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
                         addedPod = new ResourceHolderPod((ResourceHolder) addedResource, false);
                         ((ResourceHolderPod) addedPod).getExpander().setOnMouseClicked(new ExpandHandler());
                     }
-                    resourcePods.put(addedResource.getName(), basePod);
+                    resourcePods.put(addedResource.getName(), addedPod);
                 }
                 addedPod.setOpacity(0);
                 addedPod.setLayoutX(basePod.getLayoutX());
@@ -157,6 +157,11 @@ public class MainViewController extends DraggableViewBase implements Initializab
                         movedPod.getHorizontalLine().layoutYProperty(), 100.0 * newDepth + 50.0));
                 keyValues.add(new KeyValue(movedPod.getVertialLine().endYProperty(), 100.0 * newDepth + 50.0));
             }
+
+            // Paneの広さを再計算
+            keyValues.add(new KeyValue(drawRegion.prefWidthProperty(), (monitor.getMaxDepth() + 1) * 150.0));
+            keyValues.add(new KeyValue(drawRegion.prefHeightProperty(), (monitor.getMaxSiblingIndex() + 1) * 100.0));
+
             timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.3), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent t) {
@@ -165,6 +170,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
                         line.setVisible(true);
                         drawRegion.getChildren().add(line);
                     }
+                    basePod.openProperty().set(true);
                 }
             }, keyValues.toArray(new KeyValue[keyValues.size()])));
 
