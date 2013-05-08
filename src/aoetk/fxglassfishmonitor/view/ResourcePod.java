@@ -1,8 +1,13 @@
 package aoetk.fxglassfishmonitor.view;
 
 import aoetk.fxglassfishmonitor.model.Resource;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.DropShadowBuilder;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.LineBuilder;
 
 /**
  * Base class of resouce pod.
@@ -14,7 +19,7 @@ public class ResourcePod extends Region {
 
     private Line horizontalLine;
 
-    private Line vertialLine;
+    private Line verticalLine;
 
     public ResourcePod(Resource resourceModel) {
         this.resourceModel = resourceModel;
@@ -43,31 +48,43 @@ public class ResourcePod extends Region {
         this.horizontalLine = horizontalLine;
     }
 
-    public Line getVertialLine() {
-        return vertialLine;
+    public Line getVerticalLine() {
+        return verticalLine;
     }
 
-    public void setVertialLine(Line vertialLine) {
-        this.vertialLine = vertialLine;
+    public void setVerticalLine(Line verticalLine) {
+        this.verticalLine = verticalLine;
     }
 
     private void createLine() {
-        Resource parent = resourceModel.getParent();
+        final Resource parent = resourceModel.getParent();
+        final DropShadow shadow = DropShadowBuilder.create().blurType(BlurType.GAUSSIAN).color(Color.WHITE).build();
         if (parent != null) {
             int depth = resourceModel.depthProperty().get();
             int siblingIndex = resourceModel.siblingIndexProperty().get();
             int verticaldiff = siblingIndex - parent.siblingIndexProperty().get();
             if (verticaldiff == 0) {
-                horizontalLine = new Line(depth * 150.0 - 25.0, depth * 150.0 + 50.0,
-                        siblingIndex * 100.0 - 50.0, siblingIndex * 100.0 - 50.0);
-                horizontalLine.setVisible(false);
+                horizontalLine = LineBuilder.create()
+                        .startX(depth * 150.0 - 25.0).startY(siblingIndex * 100.0 + 50.0)
+                        .endX(depth * 150.0 + 50.0).endY(siblingIndex * 100.0 + 50.0)
+                        .stroke(Color.WHITE).strokeWidth(3.0)
+                        .effect(shadow).visible(false)
+                        .build();
             } else {
-                vertialLine = new Line(depth * 150.0, depth * 150.0,
-                        parent.siblingIndexProperty().get() * 100.0 - 50.0, siblingIndex * 100.0 - 50.0);
-                vertialLine.setVisible(false);
-                horizontalLine = new Line(depth * 150.0, depth * 150.0 + 50.0,
-                        siblingIndex * 100.0 - 50.0, siblingIndex * 100.0 - 50.0);
-                horizontalLine.setVisible(false);
+                verticalLine = new Line(depth * 150.0, parent.siblingIndexProperty().get() * 100.0 + 50.0,
+                        depth * 150.0, siblingIndex * 100.0 + 50.0);
+                verticalLine = LineBuilder.create()
+                        .startX(depth * 150.0).startY(siblingIndex * 100.0 - 50.0)
+                        .endX(depth * 150.0).endY(siblingIndex * 100.0 + 50.0)
+                        .stroke(Color.WHITE).strokeWidth(3.0)
+                        .effect(shadow).visible(false)
+                        .build();
+                horizontalLine = LineBuilder.create()
+                        .startX(depth * 150.0).startY(siblingIndex * 100.0 + 50.0)
+                        .endX(depth * 150.0 + 50.0).endY(siblingIndex * 100.0 + 50.0)
+                        .stroke(Color.WHITE).strokeWidth(3.0)
+                        .effect(shadow).visible(false)
+                        .build();
             }
         }
     }

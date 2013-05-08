@@ -143,8 +143,8 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 keyValues.add(new KeyValue(addedPod.layoutYProperty(),
                         100.0 * addedResource.siblingIndexProperty().get()));
                 visualizeLines.add(addedPod.getHorizontalLine());
-                if (addedPod.getVertialLine() != null) {
-                    visualizeLines.add(addedPod.getVertialLine());
+                if (addedPod.getVerticalLine() != null) {
+                    visualizeLines.add(addedPod.getVerticalLine());
                 }
             }
 
@@ -155,7 +155,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 keyValues.add(new KeyValue(movedPod.layoutYProperty(), 100.0 * newDepth));
                 keyValues.add(new KeyValue(
                         movedPod.getHorizontalLine().layoutYProperty(), 100.0 * newDepth + 50.0));
-                keyValues.add(new KeyValue(movedPod.getVertialLine().endYProperty(), 100.0 * newDepth + 50.0));
+                keyValues.add(new KeyValue(movedPod.getVerticalLine().endYProperty(), 100.0 * newDepth + 50.0));
             }
 
             // Paneの広さを再計算
