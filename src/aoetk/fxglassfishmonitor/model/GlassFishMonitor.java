@@ -56,6 +56,8 @@ public class GlassFishMonitor implements EventTarget {
         Map<String, Object> entites = (Map<String, Object>) extraProperties.get(ENTITY);
         Map<String, Object> childResources = (Map<String, Object>) extraProperties.get(CHILD_RESOURCES);
 
+        List<String> addedResourceNames = new ArrayList<>();
+        List<String> movedResouceNames = new ArrayList<>();
         int idx = 0;
         if (!ROOT_RESOURCE_NAME.equals(resourceHolder.getName()) && !entites.isEmpty()) {
             // create Statistics
@@ -64,11 +66,13 @@ public class GlassFishMonitor implements EventTarget {
                 StatisticType statisticType = getStatisticType(metricMap);
                 List<Metric> metrics = new ArrayList<>();
                 for (String metricProp : metricMap.keySet()) {
-                    metrics.add(new Metric(metricProp, metricMap.get(metricProp), getMetricTypeByPropertyName(metricProp)));
+                    metrics.add(new Metric(metricProp, metricMap.get(metricProp),
+                            getMetricTypeByPropertyName(metricProp)));
                 }
                 resourceHolder.getChildStatistics().add(
                         new Statistic(key, resourceHolder.depthProperty().get() + 1,
                         resourceHolder.siblingIndexProperty().get() + idx, statisticType, metrics, resourceHolder));
+                addedResourceNames.add(key);
                 idx++;
             }
         }
@@ -81,8 +85,12 @@ public class GlassFishMonitor implements EventTarget {
                 idx++;
             }
         }
-        updateResoucesSiblingIndex(resourceHolder);
+        updateResoucesSiblingIndex(resourceHolder, movedResouceNames);
         resourceHolder.childTracedProperty().set(true);
+        if (addedResourceNames.size() > 0 || movedResouceNames.size() > 0) {
+            onResourceChanged.handle(
+                    new ResourceChangeEvent(ResourceChangeEvent.ADD, addedResourceNames, movedResouceNames));
+        }
     }
 
     private String getResourceNameFromUrl(String url) {
@@ -125,27 +133,30 @@ public class GlassFishMonitor implements EventTarget {
         }
     }
 
-    private void updateResoucesSiblingIndex(ResourceHolder baseResouceHolder) {
+    private void updateResoucesSiblingIndex(ResourceHolder baseResouceHolder, List<String> movedResouceNames) {
         final ResourceHolder parent = baseResouceHolder.getParent();
         final int baseIndex = baseResouceHolder.siblingIndexProperty().get();
-        final int diff = baseResouceHolder.getChildStatistics().size() + baseResouceHolder.getChildResources().size() - 1;
+        final int diff = baseResouceHolder.getChildStatistics().size()
+                + baseResouceHolder.getChildResources().size() - 1;
         if (parent != null) {
             List<ResourceHolder> childResouces = parent.getChildResources();
             for (ResourceHolder resourceHolder : childResouces) {
                 if (resourceHolder.siblingIndexProperty().get() > baseIndex) {
-                    addSiblingIndex(resourceHolder, diff);
+                    addSiblingIndex(resourceHolder, diff, movedResouceNames);
                 }
             }
         }
     }
 
-    private void addSiblingIndex(ResourceHolder resourceHolder, int diff) {
+    private void addSiblingIndex(ResourceHolder resourceHolder, int diff, List<String> movedResouceNames) {
         resourceHolder.siblingIndexProperty().set(resourceHolder.siblingIndexProperty().get() + diff);
+        movedResouceNames.add(resourceHolder.getName());
         for (Statistic statistic : resourceHolder.getChildStatistics()) {
             statistic.siblingIndexProperty().set(statistic.siblingIndexProperty().get() + diff);
+            movedResouceNames.add(statistic.getName());
         }
         for (ResourceHolder childHolder : resourceHolder.getChildResources()) {
-            addSiblingIndex(childHolder, diff);
+            addSiblingIndex(childHolder, diff, movedResouceNames);
         }
     }
 
