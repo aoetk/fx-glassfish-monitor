@@ -30,6 +30,10 @@ public class ResourcePod extends Region {
         return resourceModel;
     }
 
+    public void setResourceModel(Resource resourceModel) {
+        this.resourceModel = resourceModel;
+    }
+
     @Override
     protected double computePrefWidth(double d) {
         return 150.0;

@@ -39,6 +39,20 @@ import javafx.util.Duration;
  */
 public class MainViewController extends DraggableViewBase implements Initializable {
 
+    private void movePodsVertically(
+            List<Resource> movedResources,
+            final List<KeyValue> keyValues) {
+        // 移動するPodに対してKeyValueを作成する
+        for (Resource movedResource : movedResources) {
+            ResourcePod movedPod = resourcePods.get(movedResource.getName());
+            int newDepth = movedResource.depthProperty().get();
+            keyValues.add(new KeyValue(movedPod.layoutYProperty(), 100.0 * newDepth));
+            keyValues.add(new KeyValue(
+                    movedPod.getHorizontalLine().layoutYProperty(), 100.0 * newDepth + 50.0));
+            keyValues.add(new KeyValue(movedPod.getVerticalLine().endYProperty(), 100.0 * newDepth + 50.0));
+        }
+    }
+
     class ExpandHandler implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent event) {
@@ -110,21 +124,22 @@ public class MainViewController extends DraggableViewBase implements Initializab
     }
 
     void collapseResouce(String resouceName) {
-
+        monitor.removeChildResource((ResourceHolder) resourcePods.get(resouceName).getResourceModel());
     }
 
-    private void moveResoucePod(String baseResouceName, List<Resource> addedOrRemovedResources,
-            List<Resource> movedResources, boolean added) {
+    private void moveResoucePod(final String baseResouceName, final List<Resource> addedOrRemovedResources,
+            final List<Resource> movedResources, final boolean added) {
         Timeline timeline = new Timeline();
+        final List<KeyValue> keyValues = new ArrayList<>();
         final ResourceHolderPod basePod = (ResourceHolderPod) resourcePods.get(baseResouceName);
         if (added) {
             // 追加されたPodを新たに作り、シーングラフに追加後KeyValueを作成する
-            final List<KeyValue> keyValues = new ArrayList<>();
             final List<Line> visualizeLines = new ArrayList<>();
             for (Resource addedResource : addedOrRemovedResources) {
                 ResourcePod addedPod;
                 if (resourcePods.get(addedResource.getName()) != null) {
                     addedPod = resourcePods.get(addedResource.getName());
+                    addedPod.setResourceModel(addedResource);
                 } else {
                     if (addedResource instanceof Statistic) {
                         addedPod = new StatisticPod((Statistic) addedResource);
@@ -147,16 +162,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
                     visualizeLines.add(addedPod.getVerticalLine());
                 }
             }
-
-            // 移動するPodに対してKeyValueを作成する
-            for (Resource movedResource : movedResources) {
-                ResourcePod movedPod = resourcePods.get(movedResource.getName());
-                int newDepth = movedResource.depthProperty().get();
-                keyValues.add(new KeyValue(movedPod.layoutYProperty(), 100.0 * newDepth));
-                keyValues.add(new KeyValue(
-                        movedPod.getHorizontalLine().layoutYProperty(), 100.0 * newDepth + 50.0));
-                keyValues.add(new KeyValue(movedPod.getVerticalLine().endYProperty(), 100.0 * newDepth + 50.0));
-            }
+            movePodsVertically(movedResources, keyValues);
 
             // Paneの広さを再計算
             keyValues.add(new KeyValue(drawRegion.prefWidthProperty(), (monitor.getMaxDepth() + 1) * 150.0));
@@ -175,7 +181,28 @@ public class MainViewController extends DraggableViewBase implements Initializab
             }, keyValues.toArray(new KeyValue[keyValues.size()])));
 
         } else {
-            // 削除されるPodをシーングラフから取り除く
+            // 移動処理後にシーングラフから取り除く
+            for (Resource removedResouce : addedOrRemovedResources) {
+                final ResourcePod removedPod = resourcePods.get(removedResouce.getName());
+                removedPod.setResourceModel(null);
+                final int parentDepth = removedResouce.getParent().depthProperty().get();
+                final int parentSiblingIndex = removedResouce.getParent().siblingIndexProperty().get();
+                keyValues.add(new KeyValue(removedPod.layoutXProperty(), 150.0 * parentDepth));
+                keyValues.add(new KeyValue(removedPod.layoutYProperty(), 100.0 * parentSiblingIndex));
+                keyValues.add(new KeyValue(removedPod.opacityProperty(), 0));
+                drawRegion.getChildren().remove(removedPod.getHorizontalLine());
+                drawRegion.getChildren().remove(removedPod.getVerticalLine());
+            }
+            movePodsVertically(movedResources, keyValues);
+            timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.3), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent t) {
+                    // シーングラフからPodを取り除く
+                    for (Resource removedResource : addedOrRemovedResources) {
+                        drawRegion.getChildren().remove(resourcePods.get(removedResource.getName()));
+                    }
+                }
+            }, keyValues.toArray(new KeyValue[keyValues.size()])));
         }
         timeline.play();
     }

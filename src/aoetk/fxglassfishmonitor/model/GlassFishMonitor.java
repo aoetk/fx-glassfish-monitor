@@ -58,6 +58,39 @@ public class GlassFishMonitor implements EventTarget {
         serverResource = new ResourceHolder(ROOT_RESOURCE_NAME, 0, 0, null);
     }
 
+    public void removeChildResource(ResourceHolder resourceHolder) {
+        final List<Resource> removedResources = new ArrayList<>();
+        final List<Resource> movedResources = new ArrayList<>();
+
+        // moved resources
+        int delta = resourceHolder.getChildStatistics().size() + resourceHolder.getChildResources().size() - 1;
+        final ResourceHolder parent = resourceHolder.getParent();
+        final int baseIndex = resourceHolder.siblingIndexProperty().get();
+        if (parent != null) {
+            for (ResourceHolder brotherResource : parent.getChildResources()) {
+                if (brotherResource.siblingIndexProperty().get() > baseIndex) {
+                    changeSiblingIndex(brotherResource, -delta, movedResources);
+                }
+            }
+        }
+
+        // deleted resources
+        for (Statistic childStatistic : resourceHolder.getChildStatistics()) {
+            removedResources.add(childStatistic);
+        }
+        for (ResourceHolder childResouceHolder : resourceHolder.getChildResources()) {
+            removedResources.add(childResouceHolder);
+        }
+        resourceHolder.getChildStatistics().clear();
+        resourceHolder.getChildResources().clear();
+        resourceHolder.childTracedProperty().set(false);
+        if (removedResources.size() > 0 || movedResources.size() > 0) {
+            onResourceChanged.handle(
+                    new ResourceChangeEvent(ResourceChangeEvent.REMOVE, resourceHolder.getName(),
+                    removedResources, movedResources));
+        }
+    }
+
     public void traceChildResource(ResourceHolder resourceHolder) throws ConnectFailedException {
         GlassFishData gotData = serviceClient.getResource(
                 GlassFishServiceClient.BASE_URL + getFullName(resourceHolder, resourceHolder.getName())
@@ -108,7 +141,7 @@ public class GlassFishMonitor implements EventTarget {
             }
             maxSiblingIndex = maxSiblingIndex + childResources.size() - 1;
         }
-        updateResoucesSiblingIndex(resourceHolder, movedResouces);
+        addResourcesSiblingIndex(resourceHolder, movedResouces);
         resourceHolder.childTracedProperty().set(true);
         if (addedResources.size() > 0 || movedResouces.size() > 0) {
             onResourceChanged.handle(
@@ -157,7 +190,7 @@ public class GlassFishMonitor implements EventTarget {
         }
     }
 
-    private void updateResoucesSiblingIndex(ResourceHolder baseResouceHolder, List<Resource> movedResouces) {
+    private void addResourcesSiblingIndex(ResourceHolder baseResouceHolder, List<Resource> movedResouces) {
         final ResourceHolder parent = baseResouceHolder.getParent();
         final int baseIndex = baseResouceHolder.siblingIndexProperty().get();
         final int diff = baseResouceHolder.getChildStatistics().size()
@@ -166,13 +199,13 @@ public class GlassFishMonitor implements EventTarget {
             List<ResourceHolder> childResouces = parent.getChildResources();
             for (ResourceHolder resourceHolder : childResouces) {
                 if (resourceHolder.siblingIndexProperty().get() > baseIndex) {
-                    addSiblingIndex(resourceHolder, diff, movedResouces);
+                    changeSiblingIndex(resourceHolder, diff, movedResouces);
                 }
             }
         }
     }
 
-    private void addSiblingIndex(ResourceHolder resourceHolder, int diff, List<Resource> movedResouces) {
+    private void changeSiblingIndex(ResourceHolder resourceHolder, int diff, List<Resource> movedResouces) {
         resourceHolder.siblingIndexProperty().set(resourceHolder.siblingIndexProperty().get() + diff);
         movedResouces.add(resourceHolder);
         for (Statistic statistic : resourceHolder.getChildStatistics()) {
@@ -180,7 +213,7 @@ public class GlassFishMonitor implements EventTarget {
             movedResouces.add(statistic);
         }
         for (ResourceHolder childHolder : resourceHolder.getChildResources()) {
-            addSiblingIndex(childHolder, diff, movedResouces);
+            changeSiblingIndex(childHolder, diff, movedResouces);
         }
     }
 
