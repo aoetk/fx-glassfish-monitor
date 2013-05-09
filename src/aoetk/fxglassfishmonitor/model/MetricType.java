@@ -5,5 +5,5 @@ package aoetk.fxglassfishmonitor.model;
  * @author aoetk
  */
 public enum MetricType {
-    LONG, DATETIME, STRING
+    INTEGER, DATETIME, STRING
 }

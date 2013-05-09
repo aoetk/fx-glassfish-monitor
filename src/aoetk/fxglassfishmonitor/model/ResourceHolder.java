@@ -18,6 +18,13 @@ public class ResourceHolder extends Resource {
 
     private List<ResourceHolder> childResources = new ArrayList<>();
 
+    /**
+     * Create new instance.
+     * @param name the name of the resource
+     * @param depth the depth value of the resouce
+     * @param siblingIndex the sibling index value of the resouce
+     * @param parent the parent recource
+     */
     public ResourceHolder(String name, int depth, int siblingIndex, ResourceHolder parent) {
         super(name, depth, siblingIndex, parent);
     }

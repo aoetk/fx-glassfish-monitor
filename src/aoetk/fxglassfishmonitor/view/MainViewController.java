@@ -39,17 +39,21 @@ import javafx.util.Duration;
  */
 public class MainViewController extends DraggableViewBase implements Initializable {
 
-    private void movePodsVertically(
-            List<Resource> movedResources,
-            final List<KeyValue> keyValues) {
+    private void movePodsVertically(List<Resource> movedResources, final List<KeyValue> keyValues) {
         // 移動するPodに対してKeyValueを作成する
+        boolean first = true;
         for (Resource movedResource : movedResources) {
             ResourcePod movedPod = resourcePods.get(movedResource.getName());
-            int newDepth = movedResource.depthProperty().get();
-            keyValues.add(new KeyValue(movedPod.layoutYProperty(), 100.0 * newDepth));
-            keyValues.add(new KeyValue(
-                    movedPod.getHorizontalLine().layoutYProperty(), 100.0 * newDepth + 50.0));
-            keyValues.add(new KeyValue(movedPod.getVerticalLine().endYProperty(), 100.0 * newDepth + 50.0));
+            int newIndex = movedResource.siblingIndexProperty().get();
+            keyValues.add(new KeyValue(movedPod.layoutYProperty(), 100.0 * newIndex));
+            keyValues.add(new KeyValue(movedPod.getHorizontalLine().startYProperty(), 100.0 * newIndex + 50.0));
+            keyValues.add(new KeyValue(movedPod.getHorizontalLine().endYProperty(), 100.0 * newIndex + 50.0));
+            if (first) {
+                first = false;
+            } else {
+                keyValues.add(new KeyValue(movedPod.getVerticalLine().startYProperty(), 100.0 * newIndex - 50.0));
+            }
+            keyValues.add(new KeyValue(movedPod.getVerticalLine().endYProperty(), 100.0 * newIndex + 50.0));
         }
     }
 
@@ -201,6 +205,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
                     for (Resource removedResource : addedOrRemovedResources) {
                         drawRegion.getChildren().remove(resourcePods.get(removedResource.getName()));
                     }
+                    basePod.openProperty().set(false);
                 }
             }, keyValues.toArray(new KeyValue[keyValues.size()])));
         }
