@@ -64,15 +64,8 @@ public class GlassFishMonitor implements EventTarget {
 
         // moved resources
         int delta = resourceHolder.getChildStatistics().size() + resourceHolder.getChildResources().size() - 1;
-        final ResourceHolder parent = resourceHolder.getParent();
         final int baseIndex = resourceHolder.siblingIndexProperty().get();
-        if (parent != null) {
-            for (ResourceHolder brotherResource : parent.getChildResources()) {
-                if (brotherResource.siblingIndexProperty().get() > baseIndex) {
-                    changeSiblingIndex(brotherResource, -delta, movedResources);
-                }
-            }
-        }
+        addResourcesSiblingIndex(baseIndex, -delta, resourceHolder, movedResources);
 
         // deleted resources
         for (Statistic childStatistic : resourceHolder.getChildStatistics()) {
