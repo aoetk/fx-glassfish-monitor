@@ -14,7 +14,7 @@ public class ResourceChangeEvent extends Event {
 
     public static final EventType<ResourceChangeEvent> REMOVE = new EventType<>("remove");
 
-    private String baseResourceName;
+    private String baseResourceFullName;
 
     private List<Resource> addedOrRemovedResources;
 
@@ -22,17 +22,17 @@ public class ResourceChangeEvent extends Event {
 
     public ResourceChangeEvent(
             EventType<ResourceChangeEvent> eventType,
-            String baseResouceName,
+            String baseResourceFullName,
             List<Resource> addedOrRemovedResources,
             List<Resource> movedResources) {
         super(eventType);
-        this.baseResourceName = baseResouceName;
+        this.baseResourceFullName = baseResourceFullName;
         this.addedOrRemovedResources = addedOrRemovedResources;
         this.movedResources = movedResources;
     }
 
-    public String getBaseResourceName() {
-        return baseResourceName;
+    public String getBaseResourceFullName() {
+        return baseResourceFullName;
     }
 
     public List<Resource> getAddedOrRemovedResources() {

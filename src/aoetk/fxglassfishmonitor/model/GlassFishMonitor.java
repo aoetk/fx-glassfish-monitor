@@ -79,14 +79,14 @@ public class GlassFishMonitor implements EventTarget {
         resourceHolder.childTracedProperty().set(false);
         if (removedResources.size() > 0 || movedResources.size() > 0) {
             onResourceChanged.handle(
-                    new ResourceChangeEvent(ResourceChangeEvent.REMOVE, resourceHolder.getName(),
+                    new ResourceChangeEvent(ResourceChangeEvent.REMOVE, resourceHolder.getFullName(),
                     removedResources, movedResources));
         }
     }
 
     public void traceChildResource(ResourceHolder resourceHolder) throws ConnectFailedException {
         GlassFishData gotData = serviceClient.getResource(
-                GlassFishServiceClient.BASE_URL + getFullName(resourceHolder, resourceHolder.getName())
+                GlassFishServiceClient.BASE_URL + resourceHolder.getFullName()
                 + GlassFishServiceClient.EXTENSION);
         addChildResource(resourceHolder, gotData);
     }
@@ -141,7 +141,7 @@ public class GlassFishMonitor implements EventTarget {
         resourceHolder.childTracedProperty().set(true);
         if (addedResources.size() > 0 || movedResouces.size() > 0) {
             onResourceChanged.handle(
-                    new ResourceChangeEvent(ResourceChangeEvent.ADD, resourceHolder.getName(),
+                    new ResourceChangeEvent(ResourceChangeEvent.ADD, resourceHolder.getFullName(),
                     addedResources, movedResouces));
         }
     }
@@ -208,15 +208,6 @@ public class GlassFishMonitor implements EventTarget {
         }
         for (ResourceHolder childHolder : resourceHolder.getChildResources()) {
             changeSiblingIndex(childHolder, diff, movedResouces);
-        }
-    }
-
-    private String getFullName(ResourceHolder resourceHolder, String startName) {
-        if (resourceHolder.getParent() == null) {
-            return startName;
-        } else {
-            ResourceHolder parent = resourceHolder.getParent();
-            return getFullName(parent, parent.getName() + "/" + startName);
         }
     }
 

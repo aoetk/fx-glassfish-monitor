@@ -51,4 +51,21 @@ public class Resource {
         this.parent = parent;
     }
 
+    public String getFullName() {
+        if (parent != null) {
+            return buildFullName(this, name);
+        } else {
+            return this.name;
+        }
+    }
+
+    private String buildFullName(Resource resourceHolder, String startName) {
+        if (resourceHolder.getParent() == null) {
+            return startName;
+        } else {
+            ResourceHolder aParent = resourceHolder.getParent();
+            return buildFullName(aParent, aParent.getName() + "/" + startName);
+        }
+    }
+
 }

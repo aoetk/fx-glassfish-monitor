@@ -43,7 +43,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
         // 移動するPodに対してKeyValueを作成する
         boolean first = true;
         for (Resource movedResource : movedResources) {
-            ResourcePod movedPod = resourcePods.get(movedResource.getName());
+            ResourcePod movedPod = resourcePods.get(movedResource.getFullName());
             int newIndex = movedResource.siblingIndexProperty().get();
             keyValues.add(new KeyValue(movedPod.layoutYProperty(), 100.0 * newIndex));
             keyValues.add(new KeyValue(movedPod.getHorizontalLine().startYProperty(), 100.0 * newIndex + 50.0));
@@ -63,9 +63,9 @@ public class MainViewController extends DraggableViewBase implements Initializab
             Node eventTarget = (Node) event.getTarget();
             ResourceHolderPod resourceHolderPod = (ResourceHolderPod) eventTarget.getParent();
             if (resourceHolderPod.openProperty().get()) {
-                collapseResouce(resourceHolderPod.getResourceModel().getName());
+                collapseResouce(resourceHolderPod.getResourceModel().getFullName());
             } else {
-                expandResource(resourceHolderPod.getResourceModel().getName());
+                expandResource(resourceHolderPod.getResourceModel().getFullName());
             }
         }
     }
@@ -93,7 +93,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
         monitor.setOnResourceChanged(new EventHandler<ResourceChangeEvent>() {
             @Override
             public void handle(ResourceChangeEvent event) {
-                moveResoucePod(event.getBaseResourceName(), event.getAddedOrRemovedResources(),
+                moveResoucePod(event.getBaseResourceFullName(), event.getAddedOrRemovedResources(),
                         event.getMovedResources(), event.getEventType() == ResourceChangeEvent.ADD);
             }
         });
@@ -141,8 +141,8 @@ public class MainViewController extends DraggableViewBase implements Initializab
             final List<Line> visualizeLines = new ArrayList<>();
             for (Resource addedResource : addedOrRemovedResources) {
                 ResourcePod addedPod;
-                if (resourcePods.get(addedResource.getName()) != null) {
-                    addedPod = resourcePods.get(addedResource.getName());
+                if (resourcePods.get(addedResource.getFullName()) != null) {
+                    addedPod = resourcePods.get(addedResource.getFullName());
                     addedPod.setResourceModel(addedResource);
                 } else {
                     if (addedResource instanceof Statistic) {
@@ -151,7 +151,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
                         addedPod = new ResourceHolderPod((ResourceHolder) addedResource, false);
                         ((ResourceHolderPod) addedPod).getExpander().setOnMouseClicked(new ExpandHandler());
                     }
-                    resourcePods.put(addedResource.getName(), addedPod);
+                    resourcePods.put(addedResource.getFullName(), addedPod);
                 }
                 addedPod.setOpacity(0);
                 addedPod.setLayoutX(basePod.getLayoutX());
@@ -187,7 +187,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
         } else {
             // 移動処理後にシーングラフから取り除く
             for (Resource removedResouce : addedOrRemovedResources) {
-                final ResourcePod removedPod = resourcePods.get(removedResouce.getName());
+                final ResourcePod removedPod = resourcePods.get(removedResouce.getFullName());
                 removedPod.setResourceModel(null);
                 final int parentDepth = removedResouce.getParent().depthProperty().get();
                 final int parentSiblingIndex = removedResouce.getParent().siblingIndexProperty().get();
@@ -203,7 +203,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 public void handle(ActionEvent t) {
                     // シーングラフからPodを取り除く
                     for (Resource removedResource : addedOrRemovedResources) {
-                        drawRegion.getChildren().remove(resourcePods.get(removedResource.getName()));
+                        drawRegion.getChildren().remove(resourcePods.get(removedResource.getFullName()));
                     }
                     basePod.openProperty().set(false);
                 }
