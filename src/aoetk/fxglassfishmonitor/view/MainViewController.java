@@ -1,5 +1,6 @@
 package aoetk.fxglassfishmonitor.view;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,15 +23,21 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
@@ -85,6 +92,8 @@ public class MainViewController extends DraggableViewBase implements Initializab
     private GlassFishMonitor monitor;
 
     private Map<String, ResourcePod> resourcePods = new HashMap<>();
+
+    private Map<String, Stage> statisticViews = new HashMap<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -147,6 +156,13 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 } else {
                     if (addedResource instanceof Statistic) {
                         addedPod = new StatisticPod((Statistic) addedResource);
+                        addedPod.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                StatisticPod targetPod = (StatisticPod) event.getTarget();
+                                openMetricWindow((Statistic) targetPod.getResourceModel());
+                            }
+                        });
                     } else {
                         addedPod = new ResourceHolderPod((ResourceHolder) addedResource, false);
                         ((ResourceHolderPod) addedPod).getExpander().setOnMouseClicked(new ExpandHandler());
@@ -210,6 +226,32 @@ public class MainViewController extends DraggableViewBase implements Initializab
             }, keyValues.toArray(new KeyValue[keyValues.size()])));
         }
         timeline.play();
+    }
+
+    private void openMetricWindow(Statistic statistic) {
+        String fullName = statistic.getFullName();
+        Stage statisticView = statisticViews.get(fullName);
+        if (statisticView != null && !statisticView.isShowing()) {
+            statisticView.show();
+        } else {
+            try {
+                final FXMLLoader loader = new FXMLLoader(getClass().getResource("StatisticView.fxml"));
+                loader.load();
+                Parent root = loader.getRoot();
+                StatisticViewController controller = loader.getController();
+                controller.setStatisticModel(statistic);
+                statisticView = new Stage(StageStyle.TRANSPARENT);
+                statisticView.setScene(new Scene(root, 330, 360, Color.TRANSPARENT));
+                controller.setParentStage(statisticView);
+                statisticViews.put(fullName, statisticView);
+                statisticView.show();
+
+                // TODO スケジュールタスクの登録
+
+            } catch (IOException ioe) {
+                Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ioe);
+            }
+        }
     }
 
 }

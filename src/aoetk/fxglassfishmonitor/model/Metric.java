@@ -1,5 +1,6 @@
 package aoetk.fxglassfishmonitor.model;
 
+import static aoetk.fxglassfishmonitor.model.MetricType.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -31,6 +32,29 @@ public class Metric {
 
     public MetricType getMetricType() {
         return metricType;
+    }
+
+    public static MetricType getMetricType(Object value) {
+        if (value instanceof Integer) {
+            return MetricType.INTEGER;
+        } else if (value instanceof Long) {
+            return MetricType.DATETIME;
+        } else {
+            return MetricType.STRING;
+        }
+    }
+
+    public static String getMetricValueAsString(Object metricValue, MetricType type) {
+        switch (type) {
+        case STRING:
+            return (String) metricValue;
+        case INTEGER:
+            return ((Integer) metricValue).toString();
+        case DATETIME:
+            return ((Long) metricValue).toString();
+        default:
+            return null;
+        }
     }
 
 }

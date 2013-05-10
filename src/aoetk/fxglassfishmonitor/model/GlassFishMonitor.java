@@ -106,8 +106,9 @@ public class GlassFishMonitor implements EventTarget {
                 StatisticType statisticType = getStatisticType(metricMap);
                 List<Metric> metrics = new ArrayList<>();
                 for (String metricProp : metricMap.keySet()) {
-                    MetricType type = getMetricType(metricMap.get(metricProp));
-                    metrics.add(new Metric(metricProp, getMetricValueAsString(metricMap, metricProp, type), type));
+                    MetricType type = Metric.getMetricType(metricMap.get(metricProp));
+                    metrics.add(new Metric(
+                            metricProp, Metric.getMetricValueAsString(metricMap.get(metricProp), type), type));
                 }
                 Statistic newStatistic = new Statistic(key, resourceHolder.depthProperty().get() + 1,
                         resourceHolder.siblingIndexProperty().get() + idx, statisticType, metrics, resourceHolder);
@@ -172,16 +173,6 @@ public class GlassFishMonitor implements EventTarget {
             }
         } else {
             return StatisticType.UNKNOWN;
-        }
-    }
-
-    private MetricType getMetricType(Object propValue) {
-        if (propValue instanceof Integer) {
-            return MetricType.INTEGER;
-        } else if (propValue instanceof Long) {
-            return MetricType.DATETIME;
-        } else {
-            return MetricType.STRING;
         }
     }
 
