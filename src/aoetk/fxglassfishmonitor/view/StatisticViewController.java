@@ -43,13 +43,16 @@ public class StatisticViewController extends DraggableViewBase implements Initia
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        lblMericName.setText(statisticModel.getName());
-
         // setup table
         clmProperty.setCellValueFactory(new PropertyValueFactory<Metric, String>("property"));
         clmValue.setCellValueFactory(new PropertyValueFactory<Metric, String>("value"));
         clmOp.setCellValueFactory(new PropertyValueFactory<Metric, Boolean>("prottable"));
         // TODO CellFactory
+
+    }
+
+    public void initializeData() {
+        lblMericName.setText(statisticModel.getName());
         tblMetrics.setItems(FXCollections.observableArrayList(statisticModel.getMetrics()));
     }
 

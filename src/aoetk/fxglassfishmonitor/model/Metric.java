@@ -28,7 +28,7 @@ public class Metric {
         this.prottable.set(metricType == INTEGER);
     }
 
-    public StringProperty propertyProprety() {
+    public StringProperty propertyProperty() {
         return property;
     }
 

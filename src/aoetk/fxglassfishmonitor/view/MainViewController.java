@@ -36,6 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -156,10 +157,10 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 } else {
                     if (addedResource instanceof Statistic) {
                         addedPod = new StatisticPod((Statistic) addedResource);
-                        addedPod.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        ((StatisticPod) addedPod).getPod().setOnMouseClicked(new EventHandler<MouseEvent>() {
                             @Override
                             public void handle(MouseEvent event) {
-                                StatisticPod targetPod = (StatisticPod) event.getTarget();
+                                StatisticPod targetPod = (StatisticPod) ((Rectangle) event.getTarget()).getParent();
                                 openMetricWindow((Statistic) targetPod.getResourceModel());
                             }
                         });
@@ -241,8 +242,9 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 StatisticViewController controller = loader.getController();
                 controller.setStatisticModel(statistic);
                 statisticView = new Stage(StageStyle.TRANSPARENT);
-                statisticView.setScene(new Scene(root, 330, 360, Color.TRANSPARENT));
+                statisticView.setScene(new Scene(root, 360, 360, Color.TRANSPARENT));
                 controller.setParentStage(statisticView);
+                controller.initializeData();
                 statisticViews.put(fullName, statisticView);
                 statisticView.show();
 

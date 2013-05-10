@@ -11,20 +11,20 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane id="StackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#handleMouseDragged" onMousePressed="#handleMousePressed" prefHeight="330.0" prefWidth="360.0" xmlns:fx="http://javafx.com/fxml" fx:controller="aoetk.fxglassfishmonitor.view.StatisticViewController">
+<StackPane id="StackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#handleMouseDragged" onMousePressed="#handleMousePressed" prefHeight="360.0" prefWidth="360.0" xmlns:fx="http://javafx.com/fxml" fx:controller="aoetk.fxglassfishmonitor.view.StatisticViewController">
   <children>
-    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1e90ff00" height="320.0" stroke="#00e0ff" strokeType="INSIDE" width="350.0">
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1e90ff00" height="350.0" stroke="#00e0ff" strokeType="INSIDE" width="350.0">
       <effect>
         <DropShadow blurType="GAUSSIAN" color="#00ffe0" spread="0.5" />
       </effect>
     </Rectangle>
-    <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="container">
+    <BorderPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="200.0" prefWidth="200.0" styleClass="container">
       <center>
-        <TableView fx:id="tblMetrics" prefHeight="200.0" prefWidth="200.0">
+        <TableView fx:id="tblMetrics" maxWidth="350.0" prefHeight="200.0" prefWidth="200.0">
           <columns>
-            <TableColumn editable="false" prefWidth="120.0" sortable="false" text="Property" fx:id="clmProperty" />
-            <TableColumn editable="false" prefWidth="160.0" sortable="false" text="Value" fx:id="clmValue" />
-            <TableColumn editable="false" prefWidth="50.0" sortable="false" text="Op" fx:id="clmOp" />
+            <TableColumn editable="false" maxWidth="120.0" prefWidth="120.0" resizable="false" sortable="false" text="Property" fx:id="clmProperty" />
+            <TableColumn editable="false" maxWidth="160.0" prefWidth="160.0" resizable="false" sortable="false" text="Value" fx:id="clmValue" />
+            <TableColumn editable="false" maxWidth="50.0" prefWidth="50.0" resizable="false" sortable="false" text="Op" fx:id="clmOp" />
           </columns>
         </TableView>
       </center>

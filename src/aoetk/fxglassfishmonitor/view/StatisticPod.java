@@ -57,7 +57,7 @@ public class StatisticPod extends ResourcePod {
                 .build();
         icon = ImageViewBuilder.create()
                 .image(new Image("aoetk/fxglassfishmonitor/asset/monitor.gif")).build();
-        this.getChildren().addAll(pod, label, icon);
+        this.getChildren().addAll(label, icon, pod);
     }
 
     @Override
