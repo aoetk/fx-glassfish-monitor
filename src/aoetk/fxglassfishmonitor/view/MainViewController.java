@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import aoetk.fxglassfishmonitor.event.ChartOpenEvent;
 import aoetk.fxglassfishmonitor.model.GlassFishMonitor;
 import aoetk.fxglassfishmonitor.model.Resource;
 import aoetk.fxglassfishmonitor.event.ResourceChangeEvent;
@@ -95,6 +96,8 @@ public class MainViewController extends DraggableViewBase implements Initializab
     private Map<String, ResourcePod> resourcePods = new HashMap<>();
 
     private Map<String, Stage> statisticViews = new HashMap<>();
+
+    private Map<String, Stage> chartViews = new HashMap<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -245,6 +248,12 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 statisticView.setScene(new Scene(root, 360, 360, Color.TRANSPARENT));
                 controller.setParentStage(statisticView);
                 controller.initializeData();
+                controller.setOnChartOpened(new EventHandler<ChartOpenEvent>() {
+                    @Override
+                    public void handle(ChartOpenEvent event) {
+                        openChartWindow(event.getStatisticModel(), event.getMetricProperty());
+                    }
+                });
                 statisticViews.put(fullName, statisticView);
                 statisticView.show();
 
@@ -252,6 +261,29 @@ public class MainViewController extends DraggableViewBase implements Initializab
 
             } catch (IOException ioe) {
                 Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ioe);
+            }
+        }
+    }
+
+    private void openChartWindow(Statistic statistic, String metricProperty) {
+        String fullName = statistic.getFullName();
+        Stage chartView = chartViews.get(fullName + "/" + metricProperty);
+        if (chartView != null && !chartView.isShowing()) {
+            chartView.show();
+        } else {
+            try {
+                final FXMLLoader loader = new FXMLLoader(getClass().getResource("ChartView.fxml"));
+                loader.load();
+                Parent root = loader.getRoot();
+                ChartViewController controller = loader.getController();
+                chartView = new Stage(StageStyle.TRANSPARENT);
+                chartView.setScene(new Scene(root, 360, 360, Color.TRANSPARENT));
+                controller.setParentStage(chartView);
+                chartViews.put(fullName, chartView);
+                chartView.show();
+
+            } catch (IOException ex) {
+                Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

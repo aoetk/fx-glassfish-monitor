@@ -1,5 +1,6 @@
 package aoetk.fxglassfishmonitor.event;
 
+import aoetk.fxglassfishmonitor.model.Statistic;
 import javafx.event.Event;
 import javafx.event.EventType;
 
@@ -9,18 +10,18 @@ import javafx.event.EventType;
  */
 public class ChartOpenEvent extends Event {
 
-    private String statisticFullName;
+    private Statistic statisticModel;
 
     private String metricProperty;
 
-    public ChartOpenEvent(String statisticFullName, String metricProperty) {
+    public ChartOpenEvent(Statistic statisticModel, String metricProperty) {
         super(EventType.ROOT);
-        this.statisticFullName = statisticFullName;
+        this.statisticModel = statisticModel;
         this.metricProperty = metricProperty;
     }
 
-    public String getStatisticFullName() {
-        return statisticFullName;
+    public Statistic getStatisticModel() {
+        return statisticModel;
     }
 
     public String getMetricProperty() {

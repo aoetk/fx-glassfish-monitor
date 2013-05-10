@@ -103,7 +103,7 @@ public class StatisticViewController extends DraggableViewBase implements Initia
     }
 
     private void dispatchEvent(String metricProp) {
-        onChartOpened.handle(new ChartOpenEvent(statisticModel.getFullName(), metricProp));
+        onChartOpened.handle(new ChartOpenEvent(statisticModel, metricProp));
     }
 
 }
