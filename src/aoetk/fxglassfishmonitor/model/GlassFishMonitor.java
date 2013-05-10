@@ -1,5 +1,6 @@
 package aoetk.fxglassfishmonitor.model;
 
+import aoetk.fxglassfishmonitor.event.ResourceChangeEvent;
 import static aoetk.fxglassfishmonitor.serviceclient.JsonProperyNames.*;
 
 import java.util.ArrayList;

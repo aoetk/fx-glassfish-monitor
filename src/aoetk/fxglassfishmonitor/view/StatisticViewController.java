@@ -3,11 +3,15 @@ package aoetk.fxglassfishmonitor.view;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import aoetk.fxglassfishmonitor.event.ChartOpenEvent;
 import aoetk.fxglassfishmonitor.model.Metric;
 import aoetk.fxglassfishmonitor.model.Statistic;
 import aoetk.fxglassfishmonitor.serviceclient.JsonProperyNames;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -23,7 +27,7 @@ import javafx.util.Callback;
  *
  * @author aoetk
  */
-public class StatisticViewController extends DraggableViewBase implements Initializable {
+public class StatisticViewController extends DraggableViewBase implements Initializable, EventTarget {
 
     @FXML
     Label lblMericName;
@@ -42,8 +46,14 @@ public class StatisticViewController extends DraggableViewBase implements Initia
 
     private Statistic statisticModel;
 
+    private EventHandler<ChartOpenEvent> onChartOpened;
+
     public void setStatisticModel(Statistic statisticModel) {
         this.statisticModel = statisticModel;
+    }
+
+    public void setOnChartOpened(EventHandler<ChartOpenEvent> onChartOpened) {
+        this.onChartOpened = onChartOpened;
     }
 
     @Override
@@ -57,10 +67,16 @@ public class StatisticViewController extends DraggableViewBase implements Initia
             public TableCell<Metric, String> call(TableColumn<Metric, String> column) {
                 TableCell<Metric, String> cell = new TableCell<Metric, String>(){
                     @Override
-                    protected void updateItem(String item, boolean empty) {
+                    protected void updateItem(final String item, final boolean empty) {
                         if (JsonProperyNames.COUNT.equals(item) || JsonProperyNames.CURRENT.equals(item)) {
                             Button btnChart = ButtonBuilder.create()
                                     .text("...").styleClass("chart-button").build();
+                            btnChart.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    dispatchEvent(item);
+                                }
+                            });
                             setGraphic(btnChart);
                         }
                     }
@@ -79,6 +95,15 @@ public class StatisticViewController extends DraggableViewBase implements Initia
     @FXML
     void handleBtnCloseAction(ActionEvent event) {
         parentStage.close();
+    }
+
+    @Override
+    public EventDispatchChain buildEventDispatchChain(EventDispatchChain edc) {
+        return edc;
+    }
+
+    private void dispatchEvent(String metricProp) {
+        onChartOpened.handle(new ChartOpenEvent(statisticModel.getFullName(), metricProp));
     }
 
 }

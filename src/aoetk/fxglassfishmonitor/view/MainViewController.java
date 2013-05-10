@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 import aoetk.fxglassfishmonitor.model.GlassFishMonitor;
 import aoetk.fxglassfishmonitor.model.Resource;
-import aoetk.fxglassfishmonitor.model.ResourceChangeEvent;
+import aoetk.fxglassfishmonitor.event.ResourceChangeEvent;
 import aoetk.fxglassfishmonitor.model.ResourceHolder;
 import aoetk.fxglassfishmonitor.model.Statistic;
 import aoetk.fxglassfishmonitor.serviceclient.ConnectFailedException;

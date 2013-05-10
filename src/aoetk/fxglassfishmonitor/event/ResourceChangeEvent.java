@@ -1,5 +1,6 @@
-package aoetk.fxglassfishmonitor.model;
+package aoetk.fxglassfishmonitor.event;
 
+import aoetk.fxglassfishmonitor.model.Resource;
 import java.util.List;
 import javafx.event.Event;
 import javafx.event.EventType;
