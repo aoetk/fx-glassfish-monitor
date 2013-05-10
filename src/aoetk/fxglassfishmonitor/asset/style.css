@@ -12,6 +12,16 @@
     -fx-cursor: hand;
 }
 
+.chart-button {
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
 .scroll-pane {
     -fx-background-color: transparent;
 }
@@ -29,7 +39,7 @@
 .table-view .column-header-background {
     -fx-background-color: transparent;
     -fx-border-color: transparent transparent rgba(255,255,255,0.3) transparent;
-    -fx-border-width: 1;
+    -fx-border-width: 2px;
     -fx-background-insets: 0;
     -fx-padding: 0 10 0 0;
 }

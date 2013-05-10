@@ -5,14 +5,19 @@ import java.util.ResourceBundle;
 
 import aoetk.fxglassfishmonitor.model.Metric;
 import aoetk.fxglassfishmonitor.model.Statistic;
+import aoetk.fxglassfishmonitor.serviceclient.JsonProperyNames;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 /**
  *
@@ -33,7 +38,7 @@ public class StatisticViewController extends DraggableViewBase implements Initia
     TableColumn<Metric, String> clmValue;
 
     @FXML
-    TableColumn<Metric, Boolean> clmOp;
+    TableColumn<Metric, String> clmOp;
 
     private Statistic statisticModel;
 
@@ -46,8 +51,23 @@ public class StatisticViewController extends DraggableViewBase implements Initia
         // setup table
         clmProperty.setCellValueFactory(new PropertyValueFactory<Metric, String>("property"));
         clmValue.setCellValueFactory(new PropertyValueFactory<Metric, String>("value"));
-        clmOp.setCellValueFactory(new PropertyValueFactory<Metric, Boolean>("prottable"));
-        // TODO CellFactory
+        clmOp.setCellValueFactory(new PropertyValueFactory<Metric, String>("property"));
+        clmOp.setCellFactory(new Callback<TableColumn<Metric, String>, TableCell<Metric, String>>() {
+            @Override
+            public TableCell<Metric, String> call(TableColumn<Metric, String> column) {
+                TableCell<Metric, String> cell = new TableCell<Metric, String>(){
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        if (JsonProperyNames.COUNT.equals(item) || JsonProperyNames.CURRENT.equals(item)) {
+                            Button btnChart = ButtonBuilder.create()
+                                    .text("...").styleClass("chart-button").build();
+                            setGraphic(btnChart);
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
 
     }
 
