@@ -1,6 +1,9 @@
 package aoetk.fxglassfishmonitor.model;
 
 import static aoetk.fxglassfishmonitor.model.MetricType.*;
+
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -14,12 +17,15 @@ public class Metric {
 
     private StringProperty value = new SimpleStringProperty();
 
+    private ReadOnlyBooleanWrapper prottable = new ReadOnlyBooleanWrapper();
+
     private MetricType metricType;
 
     public Metric(String property, String value, MetricType metricType) {
         this.property.set(property);
         this.value.set(value);
         this.metricType = metricType;
+        this.prottable.set(metricType == INTEGER);
     }
 
     public StringProperty propertyProprety() {
@@ -28,6 +34,10 @@ public class Metric {
 
     public StringProperty valueProperty() {
         return value;
+    }
+
+    public ReadOnlyBooleanProperty prottableProperty() {
+        return prottable.getReadOnlyProperty();
     }
 
     public MetricType getMetricType() {

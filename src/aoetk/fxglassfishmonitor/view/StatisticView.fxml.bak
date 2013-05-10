@@ -36,7 +36,7 @@
                 <Font name="System Bold" size="16.0" fx:id="x1" />
               </font>
             </Label>
-            <Label fx:id="lblMericName" font="$x1" prefWidth="190.0" text="" textFill="WHITE" HBox.hgrow="NEVER" />
+            <Label font="$x1" prefWidth="190.0" text="" textFill="WHITE" HBox.hgrow="NEVER" />
             <Region prefHeight="200.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" onAction="#handleBtnCloseAction" styleClass="close-button" text="×" HBox.hgrow="NEVER" />
           </children>
