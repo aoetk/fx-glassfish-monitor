@@ -1,6 +1,13 @@
 package aoetk.fxglassfishmonitor.model;
 
+import static aoetk.fxglassfishmonitor.serviceclient.JsonProperyNames.*;
+
 import java.util.List;
+import java.util.Map;
+
+import aoetk.fxglassfishmonitor.serviceclient.ConnectFailedException;
+import aoetk.fxglassfishmonitor.serviceclient.GlassFishData;
+import aoetk.fxglassfishmonitor.serviceclient.GlassFishServiceClient;
 
 /**
  * The statistic of GlassFish monitoring resource.
@@ -11,6 +18,8 @@ public class Statistic extends Resource {
     private List<Metric> metrics;
 
     private StatisticType type;
+
+    private GlassFishServiceClient serviceClient;
 
     /**
      * Create new instance.
@@ -26,6 +35,7 @@ public class Statistic extends Resource {
         super(name, depth, siblingIndex, parent);
         this.type = type;
         this.metrics = metrics;
+        this.serviceClient = GlassFishServiceClient.getInstance();
     }
 
     public List<Metric> getMetrics() {
@@ -34,6 +44,22 @@ public class Statistic extends Resource {
 
     public StatisticType getType() {
         return type;
+    }
+
+    public void update() throws ConnectFailedException {
+        GlassFishData gotData = serviceClient.getResource(
+                GlassFishServiceClient.BASE_URL + getFullName() + GlassFishServiceClient.EXTENSION);
+        updateMetrics(gotData);
+    }
+
+    private void updateMetrics(GlassFishData gotData) {
+        Map<String, Object> extraProperties = gotData.getExtraProperties();
+        Map<String, Object> entities = (Map<String, Object>) extraProperties.get(ENTITY);
+        Map<String, Object> metricMap = (Map<String, Object>) entities.get(this.name);
+        for (Metric metric : metrics) {
+            metric.valueProperty().set(
+                    Metric.getMetricValueAsString(metricMap.get(metric.propertyProperty().get()), metric.getMetricType()));
+        }
     }
 
 }

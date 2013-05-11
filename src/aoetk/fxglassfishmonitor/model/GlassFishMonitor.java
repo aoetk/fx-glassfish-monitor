@@ -33,7 +33,7 @@ public class GlassFishMonitor implements EventTarget {
     private EventHandler<ResourceChangeEvent> onResourceChanged;
 
     public GlassFishMonitor() {
-        serviceClient = new GlassFishServiceClient();
+        serviceClient = GlassFishServiceClient.getInstance();
         maxDepth = 0;
         maxSiblingIndex = 0;
     }

@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,6 +20,7 @@ import aoetk.fxglassfishmonitor.event.ResourceChangeEvent;
 import aoetk.fxglassfishmonitor.model.ResourceHolder;
 import aoetk.fxglassfishmonitor.model.Statistic;
 import aoetk.fxglassfishmonitor.serviceclient.ConnectFailedException;
+import aoetk.fxglassfishmonitor.task.UpdateStatisticsTask;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -66,6 +70,15 @@ public class MainViewController extends DraggableViewBase implements Initializab
         }
     }
 
+    private void addStatisticToScheduler(Statistic statistic) {
+        if (scheduler == null) {
+            updateTask = new UpdateStatisticsTask();
+            scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler.scheduleWithFixedDelay(updateTask, 10, 10, TimeUnit.SECONDS);
+        }
+        updateTask.addStatistic(statistic);
+    }
+
     class ExpandHandler implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent event) {
@@ -99,6 +112,10 @@ public class MainViewController extends DraggableViewBase implements Initializab
 
     private Map<String, Stage> chartViews = new HashMap<>();
 
+    private UpdateStatisticsTask updateTask;
+
+    private ScheduledExecutorService scheduler;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         boxTitle.setCursor(Cursor.OPEN_HAND);
@@ -120,6 +137,14 @@ public class MainViewController extends DraggableViewBase implements Initializab
 
     @FXML
     void handleBtnExitAction(ActionEvent event) {
+        if (scheduler != null) {
+            scheduler.shutdown();
+            try {
+                scheduler.awaitTermination(20, TimeUnit.SECONDS);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MainViewController.class.getName()).log(Level.INFO, null, ex);
+            }
+        }
         Platform.exit();
     }
 
@@ -257,7 +282,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 statisticViews.put(fullName, statisticView);
                 statisticView.show();
 
-                // TODO スケジュールタスクの登録
+                addStatisticToScheduler(statistic);
 
             } catch (IOException ioe) {
                 Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ioe);

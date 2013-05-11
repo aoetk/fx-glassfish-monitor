@@ -23,9 +23,15 @@ public class GlassFishServiceClient {
 
     public static final String EXTENSION = ".json";
 
+    private static final GlassFishServiceClient INSTANCE = new GlassFishServiceClient();
+
     private Client client;
 
-    public GlassFishServiceClient() {
+    public static GlassFishServiceClient getInstance() {
+        return INSTANCE;
+    }
+
+    private GlassFishServiceClient() {
         initClient();
     }
 
