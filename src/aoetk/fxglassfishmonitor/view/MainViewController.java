@@ -74,7 +74,7 @@ public class MainViewController extends DraggableViewBase implements Initializab
         if (scheduler == null) {
             updateTask = new UpdateStatisticsTask();
             scheduler = Executors.newSingleThreadScheduledExecutor();
-            scheduler.scheduleWithFixedDelay(updateTask, 10, 10, TimeUnit.SECONDS);
+            scheduler.scheduleWithFixedDelay(updateTask, 5, 5, TimeUnit.SECONDS);
         }
         updateTask.addStatistic(statistic);
     }
