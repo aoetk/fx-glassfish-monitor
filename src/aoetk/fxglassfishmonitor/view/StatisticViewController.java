@@ -60,7 +60,7 @@ public class StatisticViewController extends DraggableViewBase implements Initia
     public void initialize(URL url, ResourceBundle rb) {
         // setup table
         clmProperty.setCellValueFactory(new PropertyValueFactory<Metric, String>("property"));
-        clmValue.setCellValueFactory(new PropertyValueFactory<Metric, String>("value"));
+        clmValue.setCellValueFactory(new PropertyValueFactory<Metric, String>("formattedValue"));
         clmOp.setCellValueFactory(new PropertyValueFactory<Metric, String>("property"));
         clmOp.setCellFactory(new Callback<TableColumn<Metric, String>, TableCell<Metric, String>>() {
             @Override

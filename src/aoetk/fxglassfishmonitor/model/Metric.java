@@ -2,8 +2,13 @@ package aoetk.fxglassfishmonitor.model;
 
 import static aoetk.fxglassfishmonitor.model.MetricType.*;
 
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.ReadOnlyStringPropertyBase;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -17,7 +22,33 @@ public class Metric {
 
     private StringProperty value = new SimpleStringProperty();
 
-    private ReadOnlyBooleanWrapper prottable = new ReadOnlyBooleanWrapper();
+    private ReadOnlyStringProperty formattedValue = new ReadOnlyStringPropertyBase() {
+        {
+            value.addListener(new InvalidationListener() {
+                @Override
+                public void invalidated(Observable o) {
+                    fireValueChangedEvent();
+                }
+            });
+        }
+        @Override
+        public String get() {
+            if (metricType == DATETIME) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                return formatter.format(new Date(Long.valueOf(value.get())));
+            } else {
+                return value.get();
+            }
+        }
+        @Override
+        public Object getBean() {
+            return Metric.this;
+        }
+        @Override
+        public String getName() {
+            return "formattedValue";
+        }
+    };
 
     private MetricType metricType;
 
@@ -25,7 +56,6 @@ public class Metric {
         this.property.set(property);
         this.value.set(value);
         this.metricType = metricType;
-        this.prottable.set(metricType == INTEGER);
     }
 
     public StringProperty propertyProperty() {
@@ -36,8 +66,8 @@ public class Metric {
         return value;
     }
 
-    public ReadOnlyBooleanProperty prottableProperty() {
-        return prottable.getReadOnlyProperty();
+    public ReadOnlyStringProperty formattedValueProperty() {
+        return formattedValue;
     }
 
     public MetricType getMetricType() {
