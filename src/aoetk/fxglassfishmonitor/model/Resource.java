@@ -17,6 +17,8 @@ public class Resource {
 
     protected ResourceHolder parent;
 
+    protected Resource brotherResource;
+
     /**
      * Create new instance.
      * @param name the name of the resource
@@ -49,6 +51,14 @@ public class Resource {
 
     public void setParent(ResourceHolder parent) {
         this.parent = parent;
+    }
+
+    public Resource getBrotherResource() {
+        return brotherResource;
+    }
+
+    public void setBrotherResource(Resource brotherResource) {
+        this.brotherResource = brotherResource;
     }
 
     public String getFullName() {

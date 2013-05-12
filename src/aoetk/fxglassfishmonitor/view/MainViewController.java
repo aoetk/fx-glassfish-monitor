@@ -52,33 +52,6 @@ import javafx.util.Duration;
  */
 public class MainViewController extends DraggableViewBase implements Initializable {
 
-    private void movePodsVertically(List<Resource> movedResources, final List<KeyValue> keyValues) {
-        // 移動するPodに対してKeyValueを作成する
-        boolean first = true;
-        for (Resource movedResource : movedResources) {
-            ResourcePod movedPod = resourcePods.get(movedResource.getFullName());
-            int newIndex = movedResource.siblingIndexProperty().get();
-            keyValues.add(new KeyValue(movedPod.layoutYProperty(), 100.0 * newIndex));
-            keyValues.add(new KeyValue(movedPod.getHorizontalLine().startYProperty(), 100.0 * newIndex + 50.0));
-            keyValues.add(new KeyValue(movedPod.getHorizontalLine().endYProperty(), 100.0 * newIndex + 50.0));
-            if (first) {
-                first = false;
-            } else {
-                keyValues.add(new KeyValue(movedPod.getVerticalLine().startYProperty(), 100.0 * newIndex - 50.0));
-            }
-            keyValues.add(new KeyValue(movedPod.getVerticalLine().endYProperty(), 100.0 * newIndex + 50.0));
-        }
-    }
-
-    private void addStatisticToScheduler(Statistic statistic) {
-        if (scheduler == null) {
-            updateTask = new UpdateStatisticsTask();
-            scheduler = Executors.newSingleThreadScheduledExecutor();
-            scheduler.scheduleWithFixedDelay(updateTask, 5, 5, TimeUnit.SECONDS);
-        }
-        updateTask.addStatistic(statistic);
-    }
-
     class ExpandHandler implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent event) {
@@ -146,6 +119,15 @@ public class MainViewController extends DraggableViewBase implements Initializab
             }
         }
         Platform.exit();
+    }
+
+    private void addStatisticToScheduler(Statistic statistic) {
+        if (scheduler == null) {
+            updateTask = new UpdateStatisticsTask();
+            scheduler = Executors.newSingleThreadScheduledExecutor();
+            scheduler.scheduleWithFixedDelay(updateTask, 5, 5, TimeUnit.SECONDS);
+        }
+        updateTask.addStatistic(statistic);
     }
 
     private void drawRoot(ResourceHolder rootResource) {
@@ -312,6 +294,26 @@ public class MainViewController extends DraggableViewBase implements Initializab
 
             } catch (IOException ex) {
                 Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void movePodsVertically(List<Resource> movedResources, final List<KeyValue> keyValues) {
+        // 移動するPodに対してKeyValueを作成する
+        for (Resource movedResource : movedResources) {
+            ResourcePod movedPod = resourcePods.get(movedResource.getFullName());
+            int newIndex = movedResource.siblingIndexProperty().get();
+            keyValues.add(new KeyValue(movedPod.layoutYProperty(), 100.0 * newIndex));
+            keyValues.add(new KeyValue(movedPod.getHorizontalLine().startYProperty(), 100.0 * newIndex + 50.0));
+            keyValues.add(new KeyValue(movedPod.getHorizontalLine().endYProperty(), 100.0 * newIndex + 50.0));
+            int brotherIndex = 0;
+            if (movedResource.getBrotherResource() != null) {
+                brotherIndex = movedResource.getBrotherResource().siblingIndexProperty().get();
+            }
+            if (movedPod.getVerticalLine() != null) {
+                keyValues.add(new KeyValue(movedPod.getVerticalLine().startYProperty(),
+                        100.0 * brotherIndex + 50.0));
+                keyValues.add(new KeyValue(movedPod.getVerticalLine().endYProperty(), 100.0 * newIndex + 50.0));
             }
         }
     }

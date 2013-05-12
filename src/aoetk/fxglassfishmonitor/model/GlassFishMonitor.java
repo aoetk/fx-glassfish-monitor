@@ -98,6 +98,7 @@ public class GlassFishMonitor implements EventTarget {
         List<Resource> addedResources = new ArrayList<>();
         List<Resource> movedResouces = new ArrayList<>();
         int idx = 0;
+        Resource prevResource = null;
         if (!ROOT_RESOURCE_NAME.equals(resourceHolder.getName()) && !entites.isEmpty()) {
             // create Statistics
             for (String key : entites.keySet()) {
@@ -111,6 +112,10 @@ public class GlassFishMonitor implements EventTarget {
                 }
                 Statistic newStatistic = new Statistic(key, resourceHolder.depthProperty().get() + 1,
                         resourceHolder.siblingIndexProperty().get() + idx, statisticType, metrics, resourceHolder);
+                if (prevResource != null) {
+                    newStatistic.setBrotherResource(prevResource);
+                }
+                prevResource = newStatistic;
                 resourceHolder.getChildStatistics().add(newStatistic);
                 addedResources.add(newStatistic);
                 idx++;
@@ -125,6 +130,10 @@ public class GlassFishMonitor implements EventTarget {
             for (String key : childResources.keySet()) {
                 ResourceHolder newResouceHolder = new ResourceHolder(key, resourceHolder.depthProperty().get() + 1,
                         resourceHolder.siblingIndexProperty().get() + idx, resourceHolder);
+                if (prevResource != null) {
+                    newResouceHolder.setBrotherResource(prevResource);
+                }
+                prevResource = newResouceHolder;
                 resourceHolder.getChildResources().add(newResouceHolder);
                 addedResources.add(newResouceHolder);
                 idx++;
@@ -143,19 +152,6 @@ public class GlassFishMonitor implements EventTarget {
             onResourceChanged.handle(
                     new ResourceChangeEvent(ResourceChangeEvent.ADD, resourceHolder.getFullName(),
                     addedResources, movedResouces));
-        }
-    }
-
-    private String getMetricValueAsString(Map<String, Object> metricMap, String propName, MetricType type) {
-        switch (type) {
-        case STRING:
-            return (String) metricMap.get(propName);
-        case INTEGER:
-            return ((Integer) metricMap.get(propName)).toString();
-        case DATETIME:
-            return ((Long) metricMap.get(propName)).toString();
-        default:
-            return null;
         }
     }
 
