@@ -81,7 +81,7 @@ public class ChartViewController extends DraggableViewBase implements Initializa
 
     public void initializeData() {
         chart.setTitle(statisticModel.getName());
-        yAxis.setLabel(targetMetric + "(");
+        yAxis.setLabel(targetMetric + " (" + statisticModel.getUnit() + ")");
         final StringProperty lastUpdated = statisticModel.getLastUpdated();
         lastUpdated.addListener(new ChangeListener<String>() {
             @Override
@@ -120,9 +120,9 @@ public class ChartViewController extends DraggableViewBase implements Initializa
         }
         int diff = maxValue - minValue;
         if (diff > 0) {
-            yAxis.setTickUnit(diff / 10);
-            yAxis.setLowerBound(minValue - diff / 10);
-            yAxis.setUpperBound(maxValue + diff / 10);
+            yAxis.setTickUnit(diff / 10.0);
+            yAxis.setLowerBound(minValue - diff / 10.0);
+            yAxis.setUpperBound(maxValue + diff / 10.0);
         } else {
             yAxis.setLowerBound(minValue - 10);
             yAxis.setUpperBound(maxValue + 10);
