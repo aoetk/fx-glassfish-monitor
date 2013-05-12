@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.LabelBuilder;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.DropShadowBuilder;
@@ -85,6 +86,7 @@ public class ResourceHolderPod extends ResourcePod {
                 .alignment(Pos.CENTER)
                 .font(new Font(16.0))
                 .prefWidth(150.0)
+                .tooltip(new Tooltip(name))
                 .build();
         icon = ImageViewBuilder.create()
                 .image(new Image("aoetk/fxglassfishmonitor/asset/configurations.gif")).build();
