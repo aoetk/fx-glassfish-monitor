@@ -304,6 +304,9 @@ public class MainViewController extends DraggableViewBase implements Initializab
                 chartView = new Stage(StageStyle.TRANSPARENT);
                 chartView.setScene(new Scene(root, 360, 360, Color.TRANSPARENT));
                 controller.setParentStage(chartView);
+                controller.setStatisticModel(statistic);
+                controller.setTargetMetric(metricProperty);
+                controller.initializeData();
                 chartViews.put(fullName, chartView);
                 chartView.show();
 

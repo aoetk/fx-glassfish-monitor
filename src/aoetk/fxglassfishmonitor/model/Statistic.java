@@ -8,6 +8,7 @@ import java.util.Map;
 import aoetk.fxglassfishmonitor.serviceclient.ConnectFailedException;
 import aoetk.fxglassfishmonitor.serviceclient.GlassFishData;
 import aoetk.fxglassfishmonitor.serviceclient.GlassFishServiceClient;
+import javafx.application.Platform;
 
 /**
  * The statistic of GlassFish monitoring resource.
@@ -47,9 +48,45 @@ public class Statistic extends Resource {
     }
 
     public void update() throws ConnectFailedException {
-        GlassFishData gotData = serviceClient.getResource(
+        final GlassFishData gotData = serviceClient.getResource(
                 GlassFishServiceClient.BASE_URL + getFullName() + GlassFishServiceClient.EXTENSION);
-        updateMetrics(gotData);
+        if (Platform.isFxApplicationThread()) {
+            updateMetrics(gotData);
+        } else {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    updateMetrics(gotData);
+                }
+            });
+        }
+    }
+
+    public long getLastUpdated() {
+        for (Metric metric : metrics) {
+            if (metric.getMetricType() == MetricType.DATETIME && LASTSAMPLETIME.equals(metric.propertyProperty().get())) {
+                return Long.parseLong(metric.valueProperty().get());
+            }
+        }
+        return -1;
+    }
+
+    public String getUnit() {
+        for (Metric metric : metrics) {
+            if (UNIT.equals(metric.propertyProperty().get())) {
+                return metric.valueProperty().get();
+            }
+        }
+        return null;
+    }
+
+    public Metric getMetricByProperty(String property) {
+        for (Metric metric : metrics) {
+            if (metric.propertyProperty().get().equals(property)) {
+                return metric;
+            }
+        }
+        return null;
     }
 
     private void updateMetrics(GlassFishData gotData) {

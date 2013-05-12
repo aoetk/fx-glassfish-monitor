@@ -22,10 +22,10 @@
       <children>
         <LineChart fx:id="chart" alternativeRowFillVisible="false" legendVisible="false" title="metric" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
           <xAxis>
-            <NumberAxis fx:id="xAxis" label="Time" side="BOTTOM" />
+            <NumberAxis fx:id="xAxis" autoRanging="false" label="Time" side="BOTTOM" tickUnit="1000.0" />
           </xAxis>
           <yAxis>
-            <NumberAxis fx:id="yAxis" side="LEFT" />
+            <NumberAxis fx:id="yAxis" autoRanging="false" side="LEFT" />
           </yAxis>
           <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
