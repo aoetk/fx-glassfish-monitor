@@ -82,16 +82,16 @@ public class ChartViewController extends DraggableViewBase implements Initializa
     public void initializeData() {
         chart.setTitle(statisticModel.getName());
         yAxis.setLabel(targetMetric + "(");
-        final StringProperty valueProperty = statisticModel.getMetricByProperty(targetMetric).valueProperty();
-        valueProperty.addListener(new ChangeListener<String>() {
+        final StringProperty lastUpdated = statisticModel.getLastUpdated();
+        lastUpdated.addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                updateChart(Integer.valueOf(newValue));
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String valueProperty) {
+                updateChart(Integer.valueOf(statisticModel.getMetricByProperty(targetMetric).valueProperty().get()));
             }
         });
-        int metricValue = Integer.valueOf(valueProperty.get());
+        int metricValue = Integer.valueOf(statisticModel.getMetricByProperty(targetMetric).valueProperty().get());
         maxValue = minValue = metricValue;
-        lastUpdatedTime = statisticModel.getLastUpdated();
+        lastUpdatedTime = Long.valueOf(lastUpdated.get());
         chart.getData().add(series);
         updateChart(metricValue);
     }
@@ -102,7 +102,7 @@ public class ChartViewController extends DraggableViewBase implements Initializa
     }
 
     private void updateChart(int metricValue) {
-        long lastUpdated = statisticModel.getLastUpdated();
+        long lastUpdated = Long.valueOf(statisticModel.getLastUpdated().get());
         updateXAxisBound(lastUpdated);
         updateYAxisBound(metricValue);
         XYChart.Data<Number, Number> data = new XYChart.Data<Number, Number>(lastUpdated, metricValue);

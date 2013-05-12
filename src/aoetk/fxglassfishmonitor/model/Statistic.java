@@ -9,6 +9,8 @@ import aoetk.fxglassfishmonitor.serviceclient.ConnectFailedException;
 import aoetk.fxglassfishmonitor.serviceclient.GlassFishData;
 import aoetk.fxglassfishmonitor.serviceclient.GlassFishServiceClient;
 import javafx.application.Platform;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * The statistic of GlassFish monitoring resource.
@@ -62,13 +64,13 @@ public class Statistic extends Resource {
         }
     }
 
-    public long getLastUpdated() {
+    public StringProperty getLastUpdated() {
         for (Metric metric : metrics) {
             if (metric.getMetricType() == MetricType.DATETIME && LASTSAMPLETIME.equals(metric.propertyProperty().get())) {
-                return Long.parseLong(metric.valueProperty().get());
+                return metric.valueProperty();
             }
         }
-        return -1;
+        return null;
     }
 
     public String getUnit() {
