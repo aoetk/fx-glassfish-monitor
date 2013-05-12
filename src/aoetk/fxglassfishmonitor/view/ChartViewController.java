@@ -120,6 +120,7 @@ public class ChartViewController extends DraggableViewBase implements Initializa
         }
         int diff = maxValue - minValue;
         if (diff > 0) {
+            yAxis.setTickUnit(diff / 10);
             yAxis.setLowerBound(minValue - diff / 10);
             yAxis.setUpperBound(maxValue + diff / 10);
         } else {
