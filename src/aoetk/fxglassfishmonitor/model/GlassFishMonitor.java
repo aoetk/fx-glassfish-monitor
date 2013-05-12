@@ -86,9 +86,7 @@ public class GlassFishMonitor implements EventTarget {
     }
 
     public void traceChildResource(ResourceHolder resourceHolder) throws ConnectFailedException {
-        GlassFishData gotData = serviceClient.getResource(
-                GlassFishServiceClient.BASE_URL + resourceHolder.getFullName()
-                + GlassFishServiceClient.EXTENSION);
+        GlassFishData gotData = serviceClient.getResource(resourceHolder.getFullName());
         addChildResource(resourceHolder, gotData);
     }
 

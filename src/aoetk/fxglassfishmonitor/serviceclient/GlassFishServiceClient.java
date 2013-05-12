@@ -1,5 +1,9 @@
 package aoetk.fxglassfishmonitor.serviceclient;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.MediaType;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
@@ -19,7 +23,7 @@ public class GlassFishServiceClient {
 
     public static final String INITIAL_URL = "http://localhost:4848/monitoring/domains/server";
 
-    public static final String BASE_URL = "http://localhost:4848/monitoring/domains/";
+    public static final String BASE_URL = "//localhost:4848/monitoring/domains/";
 
     public static final String EXTENSION = ".json";
 
@@ -35,10 +39,11 @@ public class GlassFishServiceClient {
         initClient();
     }
 
-    public GlassFishData getResource(String url) throws ConnectFailedException {
-        final WebResource wr = client.resource(url);
-        wr.accept(MediaType.APPLICATION_JSON_TYPE);
+    public GlassFishData getResource(String resouceFullName) throws ConnectFailedException {
         try {
+            String urlString = BASE_URL + resouceFullName + EXTENSION;
+            final WebResource wr = client.resource(new URI("http", urlString, null));
+            wr.accept(MediaType.APPLICATION_JSON_TYPE);
             final ClientResponse response = wr.get(ClientResponse.class);
             if (response.getStatus() >= 300) {
                 throw new ConnectFailedException(response.getStatus(), null);
@@ -49,6 +54,9 @@ public class GlassFishServiceClient {
             throw new ConnectFailedException(uniformInterfaceException.getResponse().getStatus(), uniformInterfaceException);
         } catch (ClientHandlerException clientHandlerException) {
             throw new ConnectFailedException(clientHandlerException);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(GlassFishServiceClient.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ConnectFailedException(ex);
         }
     }
 

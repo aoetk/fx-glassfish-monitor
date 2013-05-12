@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import aoetk.fxglassfishmonitor.model.Statistic;
-import aoetk.fxglassfishmonitor.serviceclient.ConnectFailedException;
 
 /**
  *

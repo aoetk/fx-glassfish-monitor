@@ -50,8 +50,7 @@ public class Statistic extends Resource {
     }
 
     public void update() throws ConnectFailedException {
-        final GlassFishData gotData = serviceClient.getResource(
-                GlassFishServiceClient.BASE_URL + getFullName() + GlassFishServiceClient.EXTENSION);
+        final GlassFishData gotData = serviceClient.getResource(getFullName());
         if (Platform.isFxApplicationThread()) {
             updateMetrics(gotData);
         } else {

@@ -53,7 +53,7 @@ public class Resource {
 
     public String getFullName() {
         if (parent != null) {
-            return buildFullName(this, name);
+            return buildFullName(this, this.name);
         } else {
             return this.name;
         }
