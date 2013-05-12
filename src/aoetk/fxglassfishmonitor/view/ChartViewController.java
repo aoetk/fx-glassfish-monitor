@@ -45,6 +45,8 @@ public class ChartViewController extends DraggableViewBase implements Initializa
 
     private int minValue;
 
+    private long lastUpdatedTime;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         xAxis.setTickLabelFormatter(new StringConverter<Number>() {
@@ -89,6 +91,7 @@ public class ChartViewController extends DraggableViewBase implements Initializa
         });
         int metricValue = Integer.valueOf(valueProperty.get());
         maxValue = minValue = metricValue;
+        lastUpdatedTime = statisticModel.getLastUpdated();
         chart.getData().add(series);
         updateChart(metricValue);
     }
@@ -126,8 +129,9 @@ public class ChartViewController extends DraggableViewBase implements Initializa
     }
 
     private void updateXAxisBound(long lastUpdated) {
-        xAxis.setLowerBound(lastUpdated);
-        xAxis.setUpperBound(lastUpdated + 10000);
+        lastUpdatedTime = lastUpdated;
+        xAxis.setLowerBound(lastUpdatedTime - 100000);
+        xAxis.setUpperBound(lastUpdatedTime + 5000);
     }
 
 }
