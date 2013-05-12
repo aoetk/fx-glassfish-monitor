@@ -20,7 +20,7 @@
     </Rectangle>
     <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="container">
       <children>
-        <LineChart fx:id="chart" alternativeRowFillVisible="false" legendVisible="false" title="metric" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <LineChart fx:id="chart" alternativeRowFillVisible="false" createSymbols="false" legendVisible="false" title="metric" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
           <xAxis>
             <NumberAxis fx:id="xAxis" autoRanging="false" label="Time" side="BOTTOM" tickUnit="5000.0" />
           </xAxis>
