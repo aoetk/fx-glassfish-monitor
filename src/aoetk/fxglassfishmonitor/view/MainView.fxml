@@ -15,9 +15,9 @@
   <children>
     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1e90ff00" height="690.0" stroke="$x1" strokeType="INSIDE" width="914.0">
       <effect>
-        <DropShadow blurType="GAUSSIAN" spread="0.5">
+        <DropShadow blurType="GAUSSIAN" spread="0.7">
           <color>
-            <Color blue="0.880" green="1.000" red="0.000" fx:id="x1" />
+            <Color blue="1.000" green="0.525" red="0.349" fx:id="x1" />
           </color>
         </DropShadow>
       </effect>
@@ -33,7 +33,7 @@
       <top>
         <HBox fx:id="boxTitle" prefHeight="50.0" prefWidth="200.0">
           <children>
-            <Text fill="WHITE" fontSmoothingType="LCD" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="FX GlassFish Monitor" HBox.hgrow="NEVER">
+            <Text fill="$x1" fontSmoothingType="LCD" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="FX GlassFish Monitor" HBox.hgrow="NEVER">
               <font>
                 <Font name="System Bold Italic" size="28.0" />
               </font>

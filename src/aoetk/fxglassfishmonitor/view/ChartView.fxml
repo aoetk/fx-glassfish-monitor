@@ -13,9 +13,9 @@
 
 <StackPane id="StackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#handleMouseDragged" onMousePressed="#handleMousePressed" prefHeight="360.0" prefWidth="360.0" xmlns:fx="http://javafx.com/fxml" fx:controller="aoetk.fxglassfishmonitor.view.ChartViewController">
   <children>
-    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1e90ff00" height="350.0" stroke="#00e0ff" strokeType="INSIDE" width="350.0">
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1e90ff00" height="350.0" stroke="LIME" strokeType="INSIDE" width="350.0">
       <effect>
-        <DropShadow color="#00ffe0" spread="0.5" />
+        <DropShadow color="LIME" spread="0.5" />
       </effect>
     </Rectangle>
     <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="container">

@@ -13,9 +13,9 @@
 
 <StackPane id="StackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#handleMouseDragged" onMousePressed="#handleMousePressed" prefHeight="360.0" prefWidth="360.0" xmlns:fx="http://javafx.com/fxml" fx:controller="aoetk.fxglassfishmonitor.view.StatisticViewController">
   <children>
-    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1e90ff00" height="350.0" stroke="#00e0ff" strokeType="INSIDE" width="350.0">
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1e90ff00" height="350.0" stroke="LIME" strokeType="INSIDE" width="350.0">
       <effect>
-        <DropShadow blurType="GAUSSIAN" color="#00ffe0" spread="0.5" />
+        <DropShadow blurType="GAUSSIAN" color="LIME" spread="0.5" />
       </effect>
     </Rectangle>
     <BorderPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="200.0" prefWidth="200.0" styleClass="container">
@@ -31,12 +31,12 @@
       <top>
         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="200.0">
           <children>
-            <Label prefWidth="75.0" text="Metric -" textFill="WHITE" HBox.hgrow="NEVER">
+            <Label prefWidth="75.0" text="Metric -" textFill="LIME" HBox.hgrow="NEVER">
               <font>
                 <Font name="System Bold" size="16.0" fx:id="x1" />
               </font>
             </Label>
-            <Label fx:id="lblMericName" font="$x1" prefWidth="190.0" text="" textFill="WHITE" HBox.hgrow="NEVER" />
+            <Label fx:id="lblMericName" font="$x1" prefWidth="190.0" text="" textFill="LIME" HBox.hgrow="NEVER" />
             <Region prefHeight="200.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" onAction="#handleBtnCloseAction" styleClass="close-button" text="×" HBox.hgrow="NEVER" />
           </children>
