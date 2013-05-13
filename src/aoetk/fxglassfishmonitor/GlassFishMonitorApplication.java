@@ -22,7 +22,7 @@ public class GlassFishMonitorApplication extends Application {
         Parent root = loader.getRoot();
         MainViewController controller = loader.getController();
         controller.setParentStage(stage);
-        Scene scene = new Scene(root, 1280, 720, Color.TRANSPARENT);
+        Scene scene = new Scene(root, 924, 700, Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
