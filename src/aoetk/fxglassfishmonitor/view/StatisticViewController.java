@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
@@ -61,6 +62,19 @@ public class StatisticViewController extends DraggableViewBase implements Initia
         // setup table
         clmProperty.setCellValueFactory(new PropertyValueFactory<Metric, String>("property"));
         clmValue.setCellValueFactory(new PropertyValueFactory<Metric, String>("formattedValue"));
+        clmValue.setCellFactory(new Callback<TableColumn<Metric, String>, TableCell<Metric, String>>() {
+            @Override
+            public TableCell<Metric, String> call(TableColumn<Metric, String> column) {
+                return new TableCell<Metric, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setTooltip(new Tooltip(item));
+                        setText(item);
+                    }
+                };
+            }
+        });
         clmOp.setCellValueFactory(new PropertyValueFactory<Metric, String>("property"));
         clmOp.setCellFactory(new Callback<TableColumn<Metric, String>, TableCell<Metric, String>>() {
             @Override
