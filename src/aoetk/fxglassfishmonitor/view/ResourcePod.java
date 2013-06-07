@@ -1,6 +1,7 @@
 package aoetk.fxglassfishmonitor.view;
 
 import aoetk.fxglassfishmonitor.model.Resource;
+import javafx.scene.CacheHint;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.DropShadowBuilder;
@@ -73,6 +74,7 @@ public class ResourcePod extends Region {
                         .endX(depth * 150.0 + 50.0).endY(siblingIndex * 100.0 + 50.0)
                         .stroke(Color.WHITE).strokeWidth(3.0)
                         .effect(shadow).visible(false)
+                        .cache(true).cacheHint(CacheHint.SPEED)
                         .build();
             } else {
                 verticalLine = new Line(depth * 150.0, parent.siblingIndexProperty().get() * 100.0 + 50.0,
@@ -82,12 +84,14 @@ public class ResourcePod extends Region {
                         .endX(depth * 150.0).endY(siblingIndex * 100.0 + 50.0)
                         .stroke(Color.WHITE).strokeWidth(3.0)
                         .effect(shadow).visible(false)
+                        .cache(true)
                         .build();
                 horizontalLine = LineBuilder.create()
                         .startX(depth * 150.0).startY(siblingIndex * 100.0 + 50.0)
                         .endX(depth * 150.0 + 50.0).endY(siblingIndex * 100.0 + 50.0)
                         .stroke(Color.WHITE).strokeWidth(3.0)
                         .effect(shadow).visible(false)
+                        .cache(true).cacheHint(CacheHint.SPEED)
                         .build();
             }
         }

@@ -2,6 +2,7 @@ package aoetk.fxglassfishmonitor.view;
 
 import aoetk.fxglassfishmonitor.model.Statistic;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.LabelBuilder;
@@ -49,6 +50,7 @@ public class StatisticPod extends ResourcePod {
                 .stroke(Color.LIME).strokeWidth(3.0)
                 .fill(Color.TRANSPARENT).effect(shadow)
                 .cursor(Cursor.HAND)
+                .cache(true).cacheHint(CacheHint.SPEED)
                 .build();
         label = LabelBuilder.create()
                 .text(name).textFill(Color.LIME)
