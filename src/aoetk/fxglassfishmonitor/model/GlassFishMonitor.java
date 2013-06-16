@@ -62,22 +62,9 @@ public class GlassFishMonitor implements EventTarget {
     public void removeChildResource(ResourceHolder resourceHolder) {
         final List<Resource> removedResources = new ArrayList<>();
         final List<Resource> movedResources = new ArrayList<>();
-
-        // moved resources
-        int delta = resourceHolder.getChildStatistics().size() + resourceHolder.getChildResources().size() - 1;
+        int delta = countMovedResources(resourceHolder, movedResources, removedResources);
         final int baseIndex = resourceHolder.siblingIndexProperty().get();
         addResourcesSiblingIndex(baseIndex, -delta, resourceHolder, movedResources);
-
-        // deleted resources
-        for (Statistic childStatistic : resourceHolder.getChildStatistics()) {
-            removedResources.add(childStatistic);
-        }
-        for (ResourceHolder childResouceHolder : resourceHolder.getChildResources()) {
-            removedResources.add(childResouceHolder);
-        }
-        resourceHolder.getChildStatistics().clear();
-        resourceHolder.getChildResources().clear();
-        resourceHolder.childTracedProperty().set(false);
         if (removedResources.size() > 0 || movedResources.size() > 0) {
             onResourceChanged.handle(
                     new ResourceChangeEvent(ResourceChangeEvent.REMOVE, resourceHolder.getFullName(),
@@ -200,6 +187,28 @@ public class GlassFishMonitor implements EventTarget {
     @Override
     public EventDispatchChain buildEventDispatchChain(EventDispatchChain edc) {
         return edc;
+    }
+
+    private int countMovedResources(ResourceHolder resourceHolder, final List<Resource> movedResources,
+            final List<Resource> removedResources) {
+        // moved resources
+        int delta = resourceHolder.getChildStatistics().size() + resourceHolder.getChildResources().size() - 1;
+
+        // deleted resources
+        for (Statistic childStatistic : resourceHolder.getChildStatistics()) {
+            removedResources.add(childStatistic);
+        }
+        for (ResourceHolder childResouceHolder : resourceHolder.getChildResources()) {
+            if (childResouceHolder.childTracedProperty().get()) {
+                delta += countMovedResources(childResouceHolder, movedResources, removedResources);
+            }
+            removedResources.add(childResouceHolder);
+        }
+        resourceHolder.getChildStatistics().clear();
+        resourceHolder.getChildResources().clear();
+        resourceHolder.childTracedProperty().set(false);
+
+        return delta;
     }
 
 }
